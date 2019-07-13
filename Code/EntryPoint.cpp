@@ -273,20 +273,44 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		}
 		return 0;
 	case WM_MOUSEWHEEL:
+	{
 		if (DeltaPerLine == 0)
 			break;
-		AccumulatedDelta += (short)HIWORD(wParam);
-		while (AccumulatedDelta >= DeltaPerLine)
+		AccumulatedDelta += (short)GET_WHEEL_DELTA_WPARAM(wParam);
+		int LinesToScroll = AccumulatedDelta / DeltaPerLine;
+		if (AccumulatedDelta < 0)
 		{
-			SendMessage(WindowHandle, WM_VSCROLL, SB_LINEUP, 0);
-			AccumulatedDelta -= DeltaPerLine;
+			AccumulatedDelta = -(AccumulatedDelta % DeltaPerLine);
 		}
-		while (AccumulatedDelta <= -DeltaPerLine)
+		else {
+			AccumulatedDelta = AccumulatedDelta % DeltaPerLine;
+		}
+
+		ScrollInfo.cbSize = sizeof(ScrollInfo);
+		ScrollInfo.fMask = SIF_ALL;
+		GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
+
+		int OldVerticalScrollPosition = VerticalScrollPosition;
+		VerticalScrollPosition = ScrollInfo.nPos;
+
+
+		ScrollInfo.nPos -= LinesToScroll;
+		ScrollInfo.fMask = SIF_POS;
+		SetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo, TRUE);
+		GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
+
+		int LineCount = (TestWorkspace.BufferLength / 16);
+		if (VerticalScrollPosition != ScrollInfo.nPos)
 		{
-			SendMessage(WindowHandle, WM_VSCROLL, SB_LINEDOWN, 0);
-			AccumulatedDelta += DeltaPerLine;
+			RECT ScrollArea;
+			GetClientRect(WindowHandle, &ScrollArea);
+			// Leave the header
+			ScrollArea.top += CharHeight;
+			ScrollWindowEx(WindowHandle, 0, CharHeight * (VerticalScrollPosition - ScrollInfo.nPos), &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+			UpdateWindow(WindowHandle);
 		}
 		return 0;
+	}
 	case WM_PAINT:
 	{
 		PAINTSTRUCT PaintStruct;
