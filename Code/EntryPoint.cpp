@@ -99,8 +99,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 	static int HorizontalScrollPosition = 0;
 	static int MaxWidth;
 	SCROLLINFO ScrollInfo;
-	static int DeltaPerLine = 0, AccumulatedDelta = 0;
-	ULONG ScrollLines;
+	static ULONG LinesToScrollPerThreshold = 0;
 
 	switch (Message)
 	{
@@ -123,14 +122,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		// fall through
 	}
 	case WM_SETTINGCHANGE:
-		SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &ScrollLines, 0);
-		if (ScrollLines)
-		{
-			DeltaPerLine = WHEEL_DELTA / ScrollLines;
-		}
-		else {
-			DeltaPerLine = 0;
-		}
+		SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &LinesToScrollPerThreshold, 0);
 		return 0;
 	case WM_SIZE:
 	{
@@ -274,21 +266,29 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		return 0;
 	case WM_MOUSEWHEEL:
 	{
-		if (DeltaPerLine == 0)
+		if (LinesToScrollPerThreshold == 0)
 			break;
-		AccumulatedDelta += (short)GET_WHEEL_DELTA_WPARAM(wParam);
-		int LinesToScroll = AccumulatedDelta / DeltaPerLine;
-		if (AccumulatedDelta < 0)
-		{
-			AccumulatedDelta = -(AccumulatedDelta % DeltaPerLine);
-		}
-		else {
-			AccumulatedDelta = AccumulatedDelta % DeltaPerLine;
-		}
 
 		ScrollInfo.cbSize = sizeof(ScrollInfo);
 		ScrollInfo.fMask = SIF_ALL;
 		GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
+
+		short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
+		int LinesToScroll = 0;
+		if (LinesToScrollPerThreshold == WHEEL_PAGESCROLL)
+		{
+			if (AccumulatedDelta < 0)
+			{
+				LinesToScroll = -static_cast<int>(ScrollInfo.nPage);
+			}
+			else {
+				LinesToScroll = ScrollInfo.nPage;
+			}
+		}
+		else {
+			LinesToScroll = AccumulatedDelta / WHEEL_DELTA * LinesToScrollPerThreshold;
+		}
+		
 
 		int OldVerticalScrollPosition = VerticalScrollPosition;
 		VerticalScrollPosition = ScrollInfo.nPos;
