@@ -134,7 +134,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		ScrollInfo.cbSize = sizeof(ScrollInfo);
 		ScrollInfo.fMask = SIF_RANGE | SIF_PAGE;
 		ScrollInfo.nMin = 0;
-		ScrollInfo.nMax = LineCount - 1;
+		ScrollInfo.nMax = LineCount;
 		ScrollInfo.nPage = ClientHeight / CharHeight;
 		SetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo, TRUE);
 
