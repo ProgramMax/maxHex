@@ -100,6 +100,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 	static int MaxWidth;
 	SCROLLINFO ScrollInfo;
 	static ULONG LinesToScrollPerThreshold = 0;
+	static ULONG CharsToScrollPerThreahold = 0;
 
 	switch (Message)
 	{
@@ -123,6 +124,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 	}
 	case WM_SETTINGCHANGE:
 		SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &LinesToScrollPerThreshold, 0);
+		SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &CharsToScrollPerThreahold, 0);
 		return 0;
 	case WM_SIZE:
 	{
@@ -141,7 +143,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		ScrollInfo.cbSize = sizeof(ScrollInfo);
 		ScrollInfo.fMask = SIF_RANGE | SIF_PAGE;
 		ScrollInfo.nMin = 0;
-		ScrollInfo.nMax = 2 + ClientWidth / CharWidth;
+		ScrollInfo.nMax = 78;
 		ScrollInfo.nPage = ClientWidth / CharWidth;
 		SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
 		return 0;
@@ -222,7 +224,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		case SB_PAGERIGHT:
 			ScrollInfo.nPos += ScrollInfo.nPage;
 			break;
-		case SB_THUMBPOSITION:
+		case SB_THUMBTRACK:
 			ScrollInfo.nPos = ScrollInfo.nTrackPos;
 			break;
 		default:
@@ -234,7 +236,8 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 
 		if (HorizontalScrollPosition != ScrollInfo.nPos)
 		{
-			ScrollWindowEx(WindowHandle, CharWidth* (HorizontalScrollPosition - ScrollInfo.nPos), 0, NULL, NULL, NULL, NULL, SW_INVALIDATE);
+			ScrollWindowEx(WindowHandle, CharWidth * (HorizontalScrollPosition - ScrollInfo.nPos), 0, NULL, NULL, NULL, NULL, SW_INVALIDATE);
+			HorizontalScrollPosition = ScrollInfo.nPos;
 			UpdateWindow(WindowHandle);
 		}
 		return 0;
@@ -310,6 +313,34 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 			UpdateWindow(WindowHandle);
 		}
 		return 0;
+	}
+	case WM_MOUSEHWHEEL: // Horizontal mouse wheel
+	{
+		ScrollInfo.cbSize = sizeof(ScrollInfo);
+		ScrollInfo.fMask = SIF_ALL;
+		GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
+		HorizontalScrollPosition = ScrollInfo.nPos;
+
+		short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
+		int CharactersToScroll = AccumulatedDelta / WHEEL_DELTA * CharsToScrollPerThreahold;
+		ScrollInfo.nPos += CharactersToScroll;
+
+		ScrollInfo.fMask = SIF_POS;
+		SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
+		GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
+
+		if (HorizontalScrollPosition != ScrollInfo.nPos)
+		{
+			RECT ScrollArea;
+			GetClientRect(WindowHandle, &ScrollArea);
+			ScrollWindowEx(WindowHandle, CharWidth * (HorizontalScrollPosition - ScrollInfo.nPos), 0, NULL, NULL, NULL, NULL, SW_INVALIDATE);
+			HorizontalScrollPosition = ScrollInfo.nPos;
+			UpdateWindow(WindowHandle);
+		}
+		// Despite the docs saying you should return 0 if you handle the message, you actually need to return non-zero.
+		// If you return zero it will convert the message to a WM_HSCROLL with SB_THUMBTRACK. It will also paint over
+		// the scroll bar with an old Windows style until the message is done processing. This will cause a flicker.
+		return 1;
 	}
 	case WM_PAINT:
 	{
