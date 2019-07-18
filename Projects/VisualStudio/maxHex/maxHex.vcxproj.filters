@@ -8,4 +8,7 @@
     <ClInclude Include="..\..\..\Code\EntryPoint.hpp" />
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE" />
+  </ItemGroup>
 </Project>
