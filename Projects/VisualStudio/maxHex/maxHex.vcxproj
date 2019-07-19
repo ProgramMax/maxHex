@@ -26,6 +26,9 @@
     <ClInclude Include="..\..\..\Code\EntryPoint.hpp" />
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{07E81854-25B2-4058-B546-D9712CA4CE64}</ProjectGuid>
