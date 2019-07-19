@@ -69,4 +69,37 @@
       <Filter>Tooling\AppVeyor</Filter>
     </Xml>
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Code">
+      <UniqueIdentifier>{608d3069-f1e1-4e02-8a8b-0cadc89a676c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".github">
+      <UniqueIdentifier>{2531555b-d203-433e-ad2e-3ecdc340d802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".github\ISSUE_TEMPLATE">
+      <UniqueIdentifier>{8f2b7d6e-84f5-44a1-9c80-eef17d265da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{1a4cd02f-f9f5-4f07-89a6-c543957d998e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Code\Buffer.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\BufferChain.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\EntryPoint.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\Workspace.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Code\Workspace.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

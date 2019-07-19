@@ -1,0 +1,6 @@
+﻿  EntryPoint.cpp
+  IsBetweenTest.cpp
+c:\programming\projects\max\code\include\max\compiling\configuration\compiler\vc.hpp(83): fatal error C1189: #error:  "Unknown compiler version"
+  RangeTest.cpp
+c:\programming\projects\max\code\include\max\compiling\configuration\compiler\vc.hpp(83): fatal error C1189: #error:  "Unknown compiler version"
+  Generating Code...
