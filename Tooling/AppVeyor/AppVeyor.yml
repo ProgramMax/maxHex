@@ -1,4 +1,4 @@
-# Copyright 2018, The maxHex Contributors. All rights reserved.
+# Copyright 2019, The maxHex Contributors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,7 +12,7 @@ skip_branch_with_pr: true
 shallow_clone: true
 
 image:
-  - Visual Studio 2017
+  - Visual Studio 2019
 
 build:
   project: "Projects/VisualStudio/maxHex.sln"
