@@ -120,7 +120,10 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 
 		MaxWidth = 72 * CharWidth; // TODO: Find real value
 
-		int LineCount = (TestWorkspace.BufferLength / 16) + 1;
+		int LineCount = 0;
+		if (TestWorkspace.Buffers.BufferList.size() != 0) {
+			LineCount = (TestWorkspace.Buffers.BufferList[0].ByteBufferLength / 16) + 1;
+		}
 		SetScrollRange(WindowHandle, SB_VERT, 0, LineCount - 1, FALSE);
 		SetScrollPos(WindowHandle, SB_VERT, 0, TRUE);
 		//return 0;
@@ -132,8 +135,10 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		return 0;
 	case WM_SIZE:
 	{
-		int LineCount = (TestWorkspace.BufferLength / 16) + 1;
-
+		int LineCount = 0;
+		if (TestWorkspace.Buffers.BufferList.size() != 0) {
+			LineCount = (TestWorkspace.Buffers.BufferList[0].ByteBufferLength / 16) + 1;
+		}
 		ClientHeight = HIWORD(lParam);
 		ClientWidth = LOWORD(lParam);
 
@@ -196,7 +201,10 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
 
 
-		int LineCount = (TestWorkspace.BufferLength / 16);
+		int LineCount = 0;
+		if (TestWorkspace.Buffers.BufferList.size() != 0) {
+			LineCount = (TestWorkspace.Buffers.BufferList[0].ByteBufferLength / 16);
+		}
 		if (VerticalScrollPosition != ScrollInfo.nPos)
 		{
 			RECT ScrollArea;
@@ -306,7 +314,10 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		SetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo, TRUE);
 		GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
 
-		int LineCount = (TestWorkspace.BufferLength / 16);
+		int LineCount = 0;
+		if (TestWorkspace.Buffers.BufferList.size() != 0) {
+			LineCount = (TestWorkspace.Buffers.BufferList[0].ByteBufferLength / 16);
+		}
 		if (VerticalScrollPosition != ScrollInfo.nPos)
 		{
 			RECT ScrollArea;
@@ -354,8 +365,10 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		HFONT NewFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
 		HFONT OldFont = (HFONT)SelectObject(DeviceContext, NewFont);
 
-		int LineCount = (TestWorkspace.BufferLength / 16) + 1;
-		
+		int LineCount = 0;
+		if (TestWorkspace.Buffers.BufferList.size() != 0) {
+			LineCount = (TestWorkspace.Buffers.BufferList[0].ByteBufferLength / 16) + 1;
+		}
 		ScrollInfo.cbSize = sizeof(ScrollInfo);
 		ScrollInfo.fMask = SIF_POS;
 		GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
@@ -398,7 +411,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 			int BytesOnThisLine = 16;
 			if (i == LineCount - 1)
 			{
-				BytesOnThisLine = TestWorkspace.BufferLength % 16;
+				BytesOnThisLine = TestWorkspace.Buffers.BufferList[0].ByteBufferLength % 16;
 			}
 
 			// TODO: Display the hex values
@@ -409,7 +422,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 			const char* HexString = "0123456789ABCDEF";
 			for (int j = 0; j < BytesOnThisLine; j++)
 			{
-				const char CurrentChar = TestWorkspace.Buffer[(i * 16) + j];
+				const char CurrentChar = TestWorkspace.Buffers.BufferList[0].ByteBuffer[(i * 16) + j];
 				int HighNibble = CurrentChar >> 4;
 				int LowNibble = CurrentChar & 0x0f;
 				TextOut(DeviceContext, CharWidth * (12 + (3 * j) + 0), Height, &HexString[HighNibble], 1);
@@ -434,7 +447,7 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 			DragQueryFile((HDROP)wParam, i, Buffer, BufferCharacterCount);
 
 			TestWorkspace = maxHex::CreateWorkspaceFromFile(Buffer);
-			int LineCount = (TestWorkspace.BufferLength / 16) + 1;
+			int LineCount = (TestWorkspace.Buffers.BufferList[0].ByteBufferLength / 16) + 1;
 			SetScrollRange(WindowHandle, SB_VERT, 0, LineCount - 1, FALSE);
 			SetScrollPos(WindowHandle, SB_VERT, 0, TRUE);
 			UpdateWindow(WindowHandle);
