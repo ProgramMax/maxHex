@@ -1,14 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\..\Code\EntryPoint.cpp" />
-    <ClCompile Include="..\..\..\Code\Workspace.cpp" />
+    <ClCompile Include="..\..\..\Code\EntryPoint.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Code\Workspace.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Code\EntryPoint.hpp" />
-    <ClInclude Include="..\..\..\Code\Workspace.hpp" />
+    <ClInclude Include="..\..\..\Code\EntryPoint.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\Workspace.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\LICENSE" />
+    <None Include="..\..\..\AUTHORS" />
+    <None Include="..\..\..\Docs\code_of_conduct.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\Docs\README.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\Tooling\AppVeyor\AppVeyor.yml">
+      <Filter>Tooling\AppVeyor</Filter>
+    </None>
+    <None Include="..\..\..\Tooling\Cppcheck\.gitignore">
+      <Filter>Tooling\Cppcheck</Filter>
+    </None>
+    <None Include="..\..\..\Tooling\Cppcheck\maxHex.cppcheck">
+      <Filter>Tooling\Cppcheck</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{e400d1f4-9391-41a0-9732-b841976c159d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tooling">
+      <UniqueIdentifier>{3d6896c9-9bc0-4e4d-80dc-d2b67ccd1c16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tooling\AppVeyor">
+      <UniqueIdentifier>{135f76e9-6ac0-4f5b-bd16-376819a99a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tooling\Cppcheck">
+      <UniqueIdentifier>{039e811a-eb29-4883-b407-f5f4325036ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code">
+      <UniqueIdentifier>{9c86c9aa-98ea-43af-b2f6-7c6e5a56dbf1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\..\Tooling\AppVeyor\junit-results.xml">
+      <Filter>Tooling\AppVeyor</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
