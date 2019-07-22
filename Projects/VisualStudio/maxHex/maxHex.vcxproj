@@ -27,7 +27,16 @@
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\AUTHORS" />
+    <None Include="..\..\..\Docs\code_of_conduct.md" />
+    <None Include="..\..\..\Docs\README.md" />
     <None Include="..\..\..\LICENSE" />
+    <None Include="..\..\..\Tooling\AppVeyor\AppVeyor.yml" />
+    <None Include="..\..\..\Tooling\Cppcheck\.gitignore" />
+    <None Include="..\..\..\Tooling\Cppcheck\maxHex.cppcheck" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\..\Tooling\AppVeyor\junit-results.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
