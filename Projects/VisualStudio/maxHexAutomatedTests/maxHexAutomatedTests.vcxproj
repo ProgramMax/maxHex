@@ -20,11 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Code\Buffer.cpp" />
+    <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
+    <ClCompile Include="..\..\..\Code\BufferChainTests.cpp" />
     <ClCompile Include="..\..\..\Code\BufferTests.cpp" />
     <ClCompile Include="..\..\..\Code\TestEntryPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp" />
+    <ClInclude Include="..\..\..\Code\BufferChain.hpp" />
+    <ClInclude Include="..\..\..\Code\BufferChainTests.hpp" />
     <ClInclude Include="..\..\..\Code\BufferTests.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -82,22 +86,30 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Programming\Projects\maxHex\Dependencies\max\Code;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Programming\Projects\maxHex\Projects\VisualStudio\max\$(Platform)\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)max\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Programming\Projects\maxHex\Dependencies\max\Code;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Programming\Projects\maxHex\Projects\VisualStudio\max\$(Platform)\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)max\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Programming\Projects\maxHex\Dependencies\max\Code;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Programming\Projects\maxHex\Projects\VisualStudio\max\$(Platform)\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)max\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Programming\Projects\maxHex\Dependencies\max\Code;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Programming\Projects\maxHex\Projects\VisualStudio\max\$(Platform)\$(PlatformTarget);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)max\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

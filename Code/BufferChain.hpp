@@ -5,6 +5,9 @@
 #ifndef MAXHEX_BUFFERCHAIN_HPP
 #define MAXHEX_BUFFERCHAIN_HPP
 
+#include "Buffer.hpp"
+#include <vector>
+
 namespace maxHex
 {
 
@@ -12,6 +15,10 @@ namespace maxHex
 	{
 	public:
 
+		explicit BufferChain(Buffer&& InitialBuffer);
+		explicit BufferChain(std::vector<Buffer>&& BufferList);
+
+		std::vector<Buffer> BufferList;
 
 	};
 
