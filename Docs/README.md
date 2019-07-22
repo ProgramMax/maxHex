@@ -3,7 +3,7 @@
 maxHex is a hex editor.
 
 <!-- [![Travis CI status][travis-shield]][travis-link] -->
-<!--[![AppVeyor CI status][appveyor-shield]][appveyor-link] -->
+[![AppVeyor CI status][appveyor-shield]][appveyor-link]
 
 ## Features
 
