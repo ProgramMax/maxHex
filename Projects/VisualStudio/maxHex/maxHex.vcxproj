@@ -27,6 +27,8 @@
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\.github\ISSUE_TEMPLATE\bug_report.md" />
+    <None Include="..\..\..\.github\ISSUE_TEMPLATE\feature_request.md" />
     <None Include="..\..\..\AUTHORS" />
     <None Include="..\..\..\Docs\code_of_conduct.md" />
     <None Include="..\..\..\Docs\README.md" />

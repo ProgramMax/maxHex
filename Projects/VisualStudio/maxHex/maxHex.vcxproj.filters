@@ -34,6 +34,12 @@
     <None Include="..\..\..\Tooling\Cppcheck\maxHex.cppcheck">
       <Filter>Tooling\Cppcheck</Filter>
     </None>
+    <None Include="..\..\..\.github\ISSUE_TEMPLATE\bug_report.md">
+      <Filter>.github\ISSUE_TEMPLATE</Filter>
+    </None>
+    <None Include="..\..\..\.github\ISSUE_TEMPLATE\feature_request.md">
+      <Filter>.github\ISSUE_TEMPLATE</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Docs">
@@ -50,6 +56,12 @@
     </Filter>
     <Filter Include="Code">
       <UniqueIdentifier>{9c86c9aa-98ea-43af-b2f6-7c6e5a56dbf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".github">
+      <UniqueIdentifier>{63523266-7cfc-4d4b-9642-c6bfa4fcaeb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".github\ISSUE_TEMPLATE">
+      <UniqueIdentifier>{74321f8a-8281-483b-a7dc-b3669ecb2b16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
