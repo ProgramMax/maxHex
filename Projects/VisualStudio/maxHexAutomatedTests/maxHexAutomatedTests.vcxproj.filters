@@ -5,6 +5,7 @@
     <ClInclude Include="..\..\..\Code\Buffer.hpp" />
     <ClInclude Include="..\..\..\Code\BufferChain.hpp" />
     <ClInclude Include="..\..\..\Code\BufferChainTests.hpp" />
+    <ClInclude Include="..\..\..\Code\FileTests.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Code\BufferTests.cpp" />
@@ -12,5 +13,6 @@
     <ClCompile Include="..\..\..\Code\Buffer.cpp" />
     <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
     <ClCompile Include="..\..\..\Code\BufferChainTests.cpp" />
+    <ClCompile Include="..\..\..\Code\FileTests.cpp" />
   </ItemGroup>
 </Project>

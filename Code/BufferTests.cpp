@@ -13,7 +13,7 @@ namespace maxHex
 	void RunBufferTestSuite()
 	{
 		max::Testing::CoutResultPolicy ResultPolicy;
-		auto BufferTestSuite = max::Testing::TestSuite< max::Testing::CoutResultPolicy >{ "maxhex::Buffer test suite", std::move(ResultPolicy) };
+		auto BufferTestSuite = max::Testing::TestSuite< max::Testing::CoutResultPolicy >{ "maxHex::Buffer test suite", std::move(ResultPolicy) };
 
 		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor allocates memory", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			const size_t BufferLength = 10;

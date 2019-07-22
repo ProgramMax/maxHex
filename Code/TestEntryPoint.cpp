@@ -4,11 +4,13 @@
 
 #include "BufferTests.hpp"
 #include "BufferChainTests.hpp"
+#include "FileTests.hpp"
 
 int main()
 {
 	maxHex::RunBufferTestSuite();
 	maxHex::RunBufferChainTestSuite();
+	maxHex::RunFileTestSuite();
 
 	return 0;
 }
