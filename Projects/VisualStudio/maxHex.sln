@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "maxHexAutomatedTests", "maxHexAutomatedTests\maxHexAutomatedTests.vcxproj", "{6A065CC4-6489-4844-B45B-5B32FCC45D70}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA} = {3A9E3E87-9F00-4240-8E5D-489DC37C73DA}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "maxHex", "maxHex\maxHex.vcxproj", "{07E81854-25B2-4058-B546-D9712CA4CE64}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "maxHexAutomatedTests", "maxHexAutomatedTests\maxHexAutomatedTests.vcxproj", "{6A065CC4-6489-4844-B45B-5B32FCC45D70}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "max", "..\..\Dependencies\max\Projects\VisualStudio\max\max.vcxproj", "{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,14 +20,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x64.ActiveCfg = Debug|x64
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x64.Build.0 = Debug|x64
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x86.ActiveCfg = Debug|Win32
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x86.Build.0 = Debug|Win32
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x64.ActiveCfg = Release|x64
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x64.Build.0 = Release|x64
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x86.ActiveCfg = Release|Win32
-		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x86.Build.0 = Release|Win32
 		{6A065CC4-6489-4844-B45B-5B32FCC45D70}.Debug|x64.ActiveCfg = Debug|x64
 		{6A065CC4-6489-4844-B45B-5B32FCC45D70}.Debug|x64.Build.0 = Debug|x64
 		{6A065CC4-6489-4844-B45B-5B32FCC45D70}.Debug|x86.ActiveCfg = Debug|Win32
@@ -31,6 +28,22 @@ Global
 		{6A065CC4-6489-4844-B45B-5B32FCC45D70}.Release|x64.Build.0 = Release|x64
 		{6A065CC4-6489-4844-B45B-5B32FCC45D70}.Release|x86.ActiveCfg = Release|Win32
 		{6A065CC4-6489-4844-B45B-5B32FCC45D70}.Release|x86.Build.0 = Release|Win32
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x64.ActiveCfg = Debug|x64
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x64.Build.0 = Debug|x64
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x86.ActiveCfg = Debug|Win32
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Debug|x86.Build.0 = Debug|Win32
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x64.ActiveCfg = Release|x64
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x64.Build.0 = Release|x64
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x86.ActiveCfg = Release|Win32
+		{07E81854-25B2-4058-B546-D9712CA4CE64}.Release|x86.Build.0 = Release|Win32
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Debug|x64.ActiveCfg = Debug|x64
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Debug|x64.Build.0 = Debug|x64
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Debug|x86.ActiveCfg = Debug|Win32
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Debug|x86.Build.0 = Debug|Win32
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Release|x64.ActiveCfg = Release|x64
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Release|x64.Build.0 = Release|x64
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Release|x86.ActiveCfg = Release|Win32
+		{3A9E3E87-9F00-4240-8E5D-489DC37C73DA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

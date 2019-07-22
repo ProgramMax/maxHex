@@ -1,0 +1,22 @@
+// Copyright 2016, The max Contributors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include <max/Algorithms/IsBetweenTest.hpp>
+#include <max/Containers/Bits8Test.hpp>
+#include <max/Containers/Bits16Test.hpp>
+#include <max/Containers/Bits32Test.hpp>
+#include <max/Containers/RangeTest.hpp>
+#include <max/Containers/VectorTest.hpp>
+
+int main()
+{
+	maxAutomatedTests::Algorithms::RunIsBetweenTestSuite();
+	maxAutomatedTests::Containers::RunBits8TestSuite();
+	maxAutomatedTests::Containers::RunBits16TestSuite();
+	maxAutomatedTests::Containers::RunBits32TestSuite();
+	maxAutomatedTests::Containers::RunRangeTestSuite();
+	maxAutomatedTests::Containers::RunVectorTestSuite();
+
+	return 0;
+}
