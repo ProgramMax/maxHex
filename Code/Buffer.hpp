@@ -15,7 +15,7 @@ namespace maxHex
 	{
 	public:
 
-		explicit Buffer(const size_t BufferLength) noexcept;
+		Buffer(File&& SourceFile, size_t&& SourceOffset, const size_t BufferLength) noexcept;
 		Buffer(const Buffer& rhs) noexcept;
 		Buffer(Buffer&& rhs) noexcept;
 		~Buffer() noexcept = default;

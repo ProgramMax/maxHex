@@ -16,9 +16,22 @@ namespace maxHex
 		max::Testing::CoutResultPolicy ResultPolicy;
 		auto BufferChainTestSuite = max::Testing::TestSuite< max::Testing::CoutResultPolicy >{ "maxhex::BufferChain test suite", std::move(ResultPolicy) };
 
+		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "default constructor empties buffer list", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+			BufferChain TestObject;
+
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList.size() == 0);
+			}
+		});
+
 		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor consumes buffer", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+			#if defined(MAX_PLATFORM_WINDOWS)
+			LPCTSTR FilePath = TEXT("Test\\Path");
+			File TestFile(FilePath);
+			#endif
+			size_t SourceOffset = 0;
 			const size_t BufferLength = 10;
-			Buffer BufferToConsume(BufferLength);
+			Buffer BufferToConsume(std::move(TestFile), std::move(SourceOffset), BufferLength);
+
 			char const* MemoryLocation = BufferToConsume.ByteBuffer.get();
 
 			BufferChain TestObject(std::move(BufferToConsume));
@@ -30,11 +43,19 @@ namespace maxHex
 		});
 
 		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor consumes buffer list", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+			#if defined(MAX_PLATFORM_WINDOWS)
+			LPCTSTR FirstFilePath = TEXT("Test\\Path");
+			LPCTSTR SecondFilePath = TEXT("Test\\Path");
+			File FirstTestFile(FirstFilePath);
+			File SecondTestFile(SecondFilePath);
+			#endif
+			size_t FirstSourceOffset = 0;
+			size_t SecondSourceOffset = 0;
 			const size_t FirstBufferLength = 10;
 			const size_t SecondBufferLength = 20;
 			std::vector<Buffer> BufferListToConsume;
-			BufferListToConsume.emplace_back(FirstBufferLength);
-			BufferListToConsume.emplace_back(SecondBufferLength);
+			BufferListToConsume.emplace_back(std::move(FirstTestFile), std::move(FirstSourceOffset), FirstBufferLength);
+			BufferListToConsume.emplace_back(std::move(SecondTestFile), std::move(SecondSourceOffset), SecondBufferLength);
 
 			char const* FirstMemoryLocation = BufferListToConsume[0].ByteBuffer.get();
 			char const* SecondMemoryLocation = BufferListToConsume[1].ByteBuffer.get();

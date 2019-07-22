@@ -5,7 +5,12 @@
 #ifndef MAXHEX_WORKSPACE_HPP
 #define MAXHEX_WORKSPACE_HPP
 
+#include <max/Compiling/Configuration.hpp>
+#if defined(MAX_PLATFORM_WINDOWS)
 #include <Windows.h>
+#endif
+
+#include "BufferChain.hpp"
 
 namespace maxHex
 {
@@ -15,24 +20,21 @@ namespace maxHex
 	public:
 
 		Workspace();
+		Workspace(const Workspace& rhs);
 		Workspace(Workspace&& rhs);
+		explicit Workspace(BufferChain&& Buffers);
 		~Workspace();
 
+		Workspace& operator =(const Workspace& rhs);
 		Workspace& operator =(Workspace&& rhs);
 
-		const char* Buffer;
-		size_t BufferLength;
-
-		friend Workspace CreateWorkspaceFromFile(LPTSTR FilePath);
-
-	private:
-
-		// TODO: This should really take a buffer list, not the file
-		Workspace(LPTSTR FilePath);
+		BufferChain Buffers;
 
 	};
 
-	Workspace CreateWorkspaceFromFile(LPTSTR FilePath);
+	#if defined(MAX_PLATFORM_WINDOWS)
+	Workspace CreateWorkspaceFromFile(LPCTSTR FilePath);
+	#endif
 
 } // namespace maxHex
 

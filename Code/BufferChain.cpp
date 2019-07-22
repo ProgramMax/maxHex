@@ -8,6 +8,11 @@
 namespace maxHex
 {
 
+	BufferChain::BufferChain()
+		: BufferList()
+	{
+	}
+
 	BufferChain::BufferChain(Buffer&& InitialBuffer)
 		: BufferList()
 	{

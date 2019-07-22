@@ -15,6 +15,7 @@ namespace maxHex
 	{
 	public:
 
+		BufferChain();
 		explicit BufferChain(Buffer&& InitialBuffer);
 		explicit BufferChain(std::vector<Buffer>&& BufferList);
 
