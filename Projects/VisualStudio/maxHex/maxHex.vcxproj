@@ -23,6 +23,8 @@
     <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
     <ClCompile Include="..\..\..\Code\EntryPoint.cpp" />
     <ClCompile Include="..\..\..\Code\Workspace.cpp" />
+    <ClInclude Include="..\..\..\Code\Buffer.hpp" />
+    <ClInclude Include="..\..\..\Code\BufferChain.hpp" />
     <ClInclude Include="..\..\..\Code\EntryPoint.hpp" />
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
   </ItemGroup>
