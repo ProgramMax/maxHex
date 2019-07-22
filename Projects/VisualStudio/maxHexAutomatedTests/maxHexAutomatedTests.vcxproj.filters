@@ -3,10 +3,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\BufferTests.hpp" />
     <ClInclude Include="..\..\..\Code\Buffer.hpp" />
+    <ClInclude Include="..\..\..\Code\BufferChain.hpp" />
+    <ClInclude Include="..\..\..\Code\BufferChainTests.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Code\BufferTests.cpp" />
     <ClCompile Include="..\..\..\Code\TestEntryPoint.cpp" />
     <ClCompile Include="..\..\..\Code\Buffer.cpp" />
+    <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
+    <ClCompile Include="..\..\..\Code\BufferChainTests.cpp" />
   </ItemGroup>
 </Project>

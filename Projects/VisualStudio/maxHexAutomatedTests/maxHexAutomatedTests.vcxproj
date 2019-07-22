@@ -20,11 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Code\Buffer.cpp" />
+    <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
+    <ClCompile Include="..\..\..\Code\BufferChainTests.cpp" />
     <ClCompile Include="..\..\..\Code\BufferTests.cpp" />
     <ClCompile Include="..\..\..\Code\TestEntryPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp" />
+    <ClInclude Include="..\..\..\Code\BufferChain.hpp" />
+    <ClInclude Include="..\..\..\Code\BufferChainTests.hpp" />
     <ClInclude Include="..\..\..\Code\BufferTests.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
