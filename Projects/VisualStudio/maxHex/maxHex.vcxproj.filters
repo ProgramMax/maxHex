@@ -13,6 +13,9 @@
     <ClCompile Include="..\..\..\Code\BufferChain.cpp">
       <Filter>Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Code\File.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\EntryPoint.hpp">
@@ -25,6 +28,9 @@
       <Filter>Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Code\BufferChain.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\File.hpp">
       <Filter>Code</Filter>
     </ClInclude>
   </ItemGroup>
