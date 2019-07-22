@@ -5,6 +5,7 @@
 #ifndef MAXHEX_BUFFER_HPP
 #define MAXHEX_BUFFER_HPP
 
+#include "File.hpp"
 #include <memory>
 
 namespace maxHex
@@ -22,6 +23,8 @@ namespace maxHex
 		Buffer& operator =(const Buffer& rhs) noexcept;
 		Buffer& operator =(Buffer&& rhs) noexcept;
 
+		File SourceFile;
+		size_t SourceOffset;
 		std::unique_ptr<char[]> ByteBuffer;
 		size_t ByteBufferLength;
 
