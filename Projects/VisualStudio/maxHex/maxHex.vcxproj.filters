@@ -1,42 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\..\Code\EntryPoint.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Code\Workspace.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Code\Buffer.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Code\BufferChain.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Code\File.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
+    <Filter Include=".github">
+      <UniqueIdentifier>{81b3149a-2cdb-4db2-8b20-94024aa6e8f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".github\ISSUE_TEMPLATE">
+      <UniqueIdentifier>{a74a8dfb-0fd8-49f0-bc2c-0e0b898016a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code">
+      <UniqueIdentifier>{af51bf59-7a09-47cf-877d-25fa51399e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{7c299523-7be8-4738-86e5-2527946f65bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tooling">
+      <UniqueIdentifier>{42a3f6b3-d2cc-439f-a513-ef379f6d4fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tooling\AppVeyor">
+      <UniqueIdentifier>{d9316237-315c-4161-bf7b-7593d0b08446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tooling\Cppcheck">
+      <UniqueIdentifier>{134c376c-ce8b-4125-912a-315d3833341f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Code\EntryPoint.hpp">
-      <Filter>Code</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Code\Workspace.hpp">
-      <Filter>Code</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Code\Buffer.hpp">
-      <Filter>Code</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Code\BufferChain.hpp">
-      <Filter>Code</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Code\File.hpp">
-      <Filter>Code</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\LICENSE" />
-    <None Include="..\..\..\AUTHORS" />
+    <None Include="..\..\..\.github\ISSUE_TEMPLATE\bug_report.md">
+      <Filter>.github\ISSUE_TEMPLATE</Filter>
+    </None>
+    <None Include="..\..\..\.github\ISSUE_TEMPLATE\feature_request.md">
+      <Filter>.github\ISSUE_TEMPLATE</Filter>
+    </None>
     <None Include="..\..\..\Docs\code_of_conduct.md">
       <Filter>Docs</Filter>
     </None>
@@ -52,57 +45,31 @@
     <None Include="..\..\..\Tooling\Cppcheck\maxHex.cppcheck">
       <Filter>Tooling\Cppcheck</Filter>
     </None>
-    <None Include="..\..\..\.github\ISSUE_TEMPLATE\bug_report.md">
-      <Filter>.github\ISSUE_TEMPLATE</Filter>
-    </None>
-    <None Include="..\..\..\.github\ISSUE_TEMPLATE\feature_request.md">
-      <Filter>.github\ISSUE_TEMPLATE</Filter>
-    </None>
+    <None Include="..\..\..\AUTHORS" />
+    <None Include="..\..\..\LICENSE" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Docs">
-      <UniqueIdentifier>{e400d1f4-9391-41a0-9732-b841976c159d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tooling">
-      <UniqueIdentifier>{3d6896c9-9bc0-4e4d-80dc-d2b67ccd1c16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tooling\AppVeyor">
-      <UniqueIdentifier>{135f76e9-6ac0-4f5b-bd16-376819a99a1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tooling\Cppcheck">
-      <UniqueIdentifier>{039e811a-eb29-4883-b407-f5f4325036ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code">
-      <UniqueIdentifier>{9c86c9aa-98ea-43af-b2f6-7c6e5a56dbf1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".github">
-      <UniqueIdentifier>{63523266-7cfc-4d4b-9642-c6bfa4fcaeb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".github\ISSUE_TEMPLATE">
-      <UniqueIdentifier>{74321f8a-8281-483b-a7dc-b3669ecb2b16}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="..\..\..\Code\Buffer.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Code\BufferChain.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Code\File.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Code\Workspace.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\..\Tooling\AppVeyor\junit-results.xml">
-      <Filter>Tooling\AppVeyor</Filter>
-    </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Code">
-      <UniqueIdentifier>{608d3069-f1e1-4e02-8a8b-0cadc89a676c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".github">
-      <UniqueIdentifier>{2531555b-d203-433e-ad2e-3ecdc340d802}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".github\ISSUE_TEMPLATE">
-      <UniqueIdentifier>{8f2b7d6e-84f5-44a1-9c80-eef17d265da9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Docs">
-      <UniqueIdentifier>{1a4cd02f-f9f5-4f07-89a6-c543957d998e}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\Code\EntryPoint.hpp">
+    <ClInclude Include="..\..\..\Code\Buffer.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\BufferChain.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\File.hpp">
       <Filter>Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Code\Workspace.hpp">
@@ -110,8 +77,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Code\Workspace.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
+    <Xml Include="..\..\..\Tooling\AppVeyor\junit-results.xml">
+      <Filter>Tooling\AppVeyor</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

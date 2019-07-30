@@ -24,7 +24,7 @@ namespace maxHex
 	Workspace& Workspace::operator =(const Workspace& rhs) = default;
 	Workspace& Workspace::operator =(Workspace&& rhs) = default;
 
-	#if defined(MAX_PLATFORM_WINDOWS)
+	//#if defined(MAX_PLATFORM_WINDOWS)
 	Workspace CreateWorkspaceFromFile(LPCTSTR FilePath)
 	{
 		HANDLE FileHandle = CreateFile(FilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
@@ -42,6 +42,6 @@ namespace maxHex
 
 		return Workspace(std::move(FileBufferChain));
 	}
-	#endif
+	//#endif
 
 } // namespace maxHex
