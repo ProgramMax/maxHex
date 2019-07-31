@@ -6,7 +6,7 @@
 
 #pragma region Includes & Forward Declarations
 
-#include "Workspace.hpp"
+#include <Workspace.hpp>
 
 #define NOMINMAX
 #include <Windows.h>
@@ -380,24 +380,24 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
 		HorizontalScrollPosition = ScrollInfo.nPos;
 
-		TextOut(DeviceContext, CharWidth * 12 - (HorizontalScrollPosition * CharWidth), 0, "x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 xA xB xC xD xE xF", 47);
+		TextOut(DeviceContext, CharWidth * 12 - (HorizontalScrollPosition * CharWidth), 0, TEXT("x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 xA xB xC xD xE xF"), 47);
 
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  0) - (HorizontalScrollPosition * CharWidth), 0, "0", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  1) - (HorizontalScrollPosition * CharWidth), 0, "1", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  2) - (HorizontalScrollPosition * CharWidth), 0, "2", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  3) - (HorizontalScrollPosition * CharWidth), 0, "3", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  4) - (HorizontalScrollPosition * CharWidth), 0, "4", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  5) - (HorizontalScrollPosition * CharWidth), 0, "5", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  6) - (HorizontalScrollPosition * CharWidth), 0, "6", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  7) - (HorizontalScrollPosition * CharWidth), 0, "7", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  8) - (HorizontalScrollPosition * CharWidth), 0, "8", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  9) - (HorizontalScrollPosition * CharWidth), 0, "9", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 10) - (HorizontalScrollPosition * CharWidth), 0, "A", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 11) - (HorizontalScrollPosition * CharWidth), 0, "B", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 12) - (HorizontalScrollPosition * CharWidth), 0, "C", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 13) - (HorizontalScrollPosition * CharWidth), 0, "D", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 14) - (HorizontalScrollPosition * CharWidth), 0, "E", 1);
-		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 15) - (HorizontalScrollPosition * CharWidth), 0, "F", 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  0) - (HorizontalScrollPosition * CharWidth), 0, TEXT("0"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  1) - (HorizontalScrollPosition * CharWidth), 0, TEXT("1"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  2) - (HorizontalScrollPosition * CharWidth), 0, TEXT("2"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  3) - (HorizontalScrollPosition * CharWidth), 0, TEXT("3"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  4) - (HorizontalScrollPosition * CharWidth), 0, TEXT("4"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  5) - (HorizontalScrollPosition * CharWidth), 0, TEXT("5"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  6) - (HorizontalScrollPosition * CharWidth), 0, TEXT("6"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  7) - (HorizontalScrollPosition * CharWidth), 0, TEXT("7"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  8) - (HorizontalScrollPosition * CharWidth), 0, TEXT("8"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 +  9) - (HorizontalScrollPosition * CharWidth), 0, TEXT("9"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 10) - (HorizontalScrollPosition * CharWidth), 0, TEXT("A"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 11) - (HorizontalScrollPosition * CharWidth), 0, TEXT("B"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 12) - (HorizontalScrollPosition * CharWidth), 0, TEXT("C"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 13) - (HorizontalScrollPosition * CharWidth), 0, TEXT("D"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 14) - (HorizontalScrollPosition * CharWidth), 0, TEXT("E"), 1);
+		TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 15) - (HorizontalScrollPosition * CharWidth), 0, TEXT("F"), 1);
 
 		for (int i = VerticalScrollPosition; i < LineCount; i++)
 		{
@@ -429,9 +429,9 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 				const unsigned char CurrentChar = TestWorkspace.Buffers.BufferList[0].ByteBuffer[(i * 16) + j];
 				size_t HighNibble = CurrentChar >> 4;
 				size_t  LowNibble = CurrentChar & 0x0f;
-				TextOut(DeviceContext, (CharWidth * (12 + (3 * j) + 0)) - (HorizontalScrollPosition * CharWidth), Height, &HexString[HighNibble], 1);
-				TextOut(DeviceContext, (CharWidth * (12 + (3 * j) + 1)) - (HorizontalScrollPosition * CharWidth), Height, &HexString[ LowNibble], 1);
-				TextOut(DeviceContext, (CharWidth * (47 + 12 + 3 + j)) - (HorizontalScrollPosition * CharWidth), Height, reinterpret_cast<const char*>(&CurrentChar), 1);
+				TextOutA(DeviceContext, (CharWidth * (12 + (3 * j) + 0)) - (HorizontalScrollPosition * CharWidth), Height, &HexString[HighNibble], 1);
+				TextOutA(DeviceContext, (CharWidth * (12 + (3 * j) + 1)) - (HorizontalScrollPosition * CharWidth), Height, &HexString[ LowNibble], 1);
+				TextOutA(DeviceContext, (CharWidth * (47 + 12 + 3 + j)) - (HorizontalScrollPosition * CharWidth), Height, reinterpret_cast<const char*>(&CurrentChar), 1);
 			}
 		}
 
