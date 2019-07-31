@@ -32,9 +32,9 @@ namespace maxHex
 
 	};
 
-	//#if defined(MAX_PLATFORM_WINDOWS)
+	#if defined(MAX_PLATFORM_WINDOWS)
 	Workspace CreateWorkspaceFromFile(LPCTSTR FilePath);
-	//#endif
+	#endif
 
 } // namespace maxHex
 
