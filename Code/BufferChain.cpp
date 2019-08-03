@@ -13,13 +13,13 @@ namespace maxHex
 	{
 	}
 
-	BufferChain::BufferChain(Buffer&& InitialBuffer)
+	BufferChain::BufferChain(Buffer InitialBuffer)
 		: BufferList()
 	{
 		BufferList.push_back(std::move(InitialBuffer));
 	}
 
-	BufferChain::BufferChain(std::vector<Buffer>&& BufferList)
+	BufferChain::BufferChain(std::vector<Buffer> BufferList)
 		: BufferList(std::move(BufferList))
 	{
 	}

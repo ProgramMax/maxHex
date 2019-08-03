@@ -10,19 +10,21 @@
 namespace maxHex
 {
 
-	Buffer::Buffer(File&& SourceFile, size_t&& SourceOffset, const size_t BufferLength) noexcept
+	Buffer::Buffer(File SourceFile, size_t SourceOffset, const size_t BufferLength, const size_t BufferCapacity) noexcept
 		: SourceFile(std::move(SourceFile))
 		, SourceOffset(std::move(SourceOffset))
-		, ByteBuffer(std::make_unique<char[]>(BufferLength))
+		, ByteBuffer(std::make_unique<char[]>(BufferCapacity))
 		, ByteBufferLength(BufferLength)
+		, ByteBufferCapacity(BufferCapacity)
 	{
 	}
 
 	Buffer::Buffer(const Buffer& rhs) noexcept
 		: SourceFile(rhs.SourceFile)
 		, SourceOffset(rhs.SourceOffset)
-		, ByteBuffer(std::make_unique<char[]>(rhs.ByteBufferLength))
+		, ByteBuffer(std::make_unique<char[]>(rhs.ByteBufferCapacity))
 		, ByteBufferLength(rhs.ByteBufferLength)
+		, ByteBufferCapacity(rhs.ByteBufferCapacity)
 	{
 		std::copy(rhs.ByteBuffer.get(), rhs.ByteBuffer.get() + rhs.ByteBufferLength, ByteBuffer.get());
 	}
@@ -32,6 +34,7 @@ namespace maxHex
 		, SourceOffset(std::move(rhs.SourceOffset))
 		, ByteBuffer(std::move(rhs.ByteBuffer))
 		, ByteBufferLength(std::move(rhs.ByteBufferLength))
+		, ByteBufferCapacity(std::move(rhs.ByteBufferCapacity))
 	{
 		rhs.ByteBuffer = nullptr;
 	}
@@ -40,8 +43,10 @@ namespace maxHex
 	{
 		SourceFile = rhs.SourceFile;
 		SourceOffset = rhs.SourceOffset;
-		ByteBuffer = std::make_unique<char[]>(rhs.ByteBufferLength);
+		ByteBuffer = std::make_unique<char[]>(rhs.ByteBufferCapacity);
 		ByteBufferLength = rhs.ByteBufferLength;
+		ByteBufferCapacity = rhs.ByteBufferCapacity;
+
 		std::copy(rhs.ByteBuffer.get(), rhs.ByteBuffer.get() + rhs.ByteBufferLength, ByteBuffer.get());
 
 		return *this;
@@ -54,6 +59,7 @@ namespace maxHex
 		ByteBuffer = std::move(rhs.ByteBuffer);
 		rhs.ByteBuffer = nullptr;
 		ByteBufferLength = std::move(rhs.ByteBufferLength);
+		ByteBufferCapacity = std::move(rhs.ByteBufferCapacity);
 
 		return *this;
 	}

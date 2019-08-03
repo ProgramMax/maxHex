@@ -15,7 +15,7 @@ namespace maxHex
 	{
 	public:
 
-		Buffer(File&& SourceFile, size_t&& SourceOffset, const size_t BufferLength) noexcept;
+		Buffer(File SourceFile, size_t SourceOffset, const size_t BufferLength, const size_t BufferCapacity) noexcept;
 		Buffer(const Buffer& rhs) noexcept;
 		Buffer(Buffer&& rhs) noexcept;
 		~Buffer() noexcept = default;
@@ -27,6 +27,7 @@ namespace maxHex
 		size_t SourceOffset;
 		std::unique_ptr<char[]> ByteBuffer;
 		size_t ByteBufferLength;
+		size_t ByteBufferCapacity;
 
 	};
 
