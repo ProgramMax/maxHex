@@ -31,7 +31,7 @@ namespace maxHex
 		DWORD TotalSizeRead = 0;
 		size_t SourceOffset = 0;
 		std::vector<Buffer> FileBuffers;
-		const size_t ReadChunkSizeInBytes = 100;
+		const size_t ReadChunkSizeInBytes = 4 * 1024;
 
 		HANDLE FileHandle = CreateFile(FilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 		DWORD FileSize = GetFileSize(FileHandle, NULL);
