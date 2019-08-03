@@ -30,7 +30,8 @@ namespace maxHex
 			#endif
 			size_t SourceOffset = 0;
 			const size_t BufferLength = 10;
-			Buffer BufferToConsume(std::move(TestFile), std::move(SourceOffset), BufferLength);
+			const size_t BufferCapacity = 20;
+			Buffer BufferToConsume(std::move(TestFile), std::move(SourceOffset), BufferLength, BufferCapacity);
 
 			char const* MemoryLocation = BufferToConsume.ByteBuffer.get();
 
@@ -38,6 +39,7 @@ namespace maxHex
 
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBuffer.get() == MemoryLocation);
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferLength == BufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferCapacity == BufferCapacity);
 			CurrentTest.MAX_TESTING_ASSERT(BufferToConsume.ByteBuffer == nullptr);
 			}
 		});
@@ -50,12 +52,14 @@ namespace maxHex
 			File SecondTestFile(SecondFilePath);
 			#endif
 			size_t FirstSourceOffset = 0;
-			size_t SecondSourceOffset = 0;
-			const size_t FirstBufferLength = 10;
-			const size_t SecondBufferLength = 20;
+			size_t SecondSourceOffset = 10;
+			const size_t FirstBufferLength = 20;
+			const size_t SecondBufferLength = 30;
+			const size_t FirstBufferCapacity = 40;
+			const size_t SecondBufferCapacity = 50;
 			std::vector<Buffer> BufferListToConsume;
-			BufferListToConsume.emplace_back(std::move(FirstTestFile), std::move(FirstSourceOffset), FirstBufferLength);
-			BufferListToConsume.emplace_back(std::move(SecondTestFile), std::move(SecondSourceOffset), SecondBufferLength);
+			BufferListToConsume.emplace_back(std::move(FirstTestFile), std::move(FirstSourceOffset), FirstBufferLength, FirstBufferCapacity);
+			BufferListToConsume.emplace_back(std::move(SecondTestFile), std::move(SecondSourceOffset), SecondBufferLength, SecondBufferCapacity);
 
 			char const* FirstMemoryLocation = BufferListToConsume[0].ByteBuffer.get();
 			char const* SecondMemoryLocation = BufferListToConsume[1].ByteBuffer.get();
@@ -64,8 +68,10 @@ namespace maxHex
 
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBuffer.get() == FirstMemoryLocation);
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferLength == FirstBufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferCapacity == FirstBufferCapacity);
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1].ByteBuffer.get() == SecondMemoryLocation);
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1].ByteBufferLength == SecondBufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1].ByteBufferCapacity == SecondBufferCapacity);
 			CurrentTest.MAX_TESTING_ASSERT(BufferListToConsume.size() == 0);
 			}
 		});

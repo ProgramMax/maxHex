@@ -22,7 +22,7 @@ namespace maxHex
 		Workspace();
 		Workspace(const Workspace& rhs);
 		Workspace(Workspace&& rhs);
-		explicit Workspace(BufferChain&& Buffers);
+		explicit Workspace(BufferChain Buffers);
 		~Workspace();
 
 		Workspace& operator =(const Workspace& rhs);
