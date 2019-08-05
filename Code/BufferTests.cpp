@@ -3,13 +3,9 @@
 // found in the LICENSE file.
 
 #include "Buffer.hpp"
-#include "File.hpp"
 #include <max/Testing/TestSuite.hpp>
 #include <max/Testing/CoutResultPolicy.hpp>
 #include <utility>
-#if defined(MAX_PLATFORM_WINDOWS)
-#include <Windows.h>
-#endif
 
 namespace maxHex
 {
@@ -19,130 +15,99 @@ namespace maxHex
 		max::Testing::CoutResultPolicy ResultPolicy;
 		auto BufferTestSuite = max::Testing::TestSuite< max::Testing::CoutResultPolicy >{ "maxHex::Buffer test suite", std::move(ResultPolicy) };
 
-		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor allocates memory and populates fields", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FilePath = TEXT("Test\\Path");
-			File TestFile(FilePath);
-			#endif
-			size_t SourceOffset = 0;
+		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			const size_t BufferLength = 10;
 			const size_t BufferCapacity = 20;
-			Buffer TestObject(std::move(TestFile), std::move(SourceOffset), BufferLength, BufferCapacity);
+			Buffer TestObject(BufferBacking::Memory, BufferLength, BufferCapacity);
 
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBuffer != nullptr);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferLength == BufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferCapacity == BufferCapacity);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Backing == BufferBacking::Memory);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Storage != nullptr);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Length == BufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Capacity == BufferCapacity);
 		}
 		});
 
-		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "copy constructor copies", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FilePath = TEXT("Test\\Path");
-			File TestFile(FilePath);
-			#endif
-			size_t SourceOffset = 0;
+		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "copy constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			const size_t BufferLength = 10;
 			const size_t BufferCapacity = 20;
-			Buffer OriginalObject(std::move(TestFile), std::move(SourceOffset), BufferLength, BufferCapacity);
+			Buffer OriginalObject(BufferBacking::Memory, BufferLength, BufferCapacity);
 
 			for (size_t i = 0; i < BufferLength; i++)
 			{
-				OriginalObject.ByteBuffer[i] = static_cast<char>(i);
+				OriginalObject.Storage[i] = static_cast<char>(i);
 			}
 
 			Buffer TestObject = OriginalObject;
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferLength == OriginalObject.ByteBufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferCapacity == OriginalObject.ByteBufferCapacity);
+
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Backing == OriginalObject.Backing);
 			for (size_t i = 0; i < BufferLength; i++)
 			{
-				CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBuffer[i] == OriginalObject.ByteBuffer[i]);
+				CurrentTest.MAX_TESTING_ASSERT(TestObject.Storage[i] == OriginalObject.Storage[i]);
 			}
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Length == OriginalObject.Length);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Capacity == OriginalObject.Capacity);
 		}
 		});
 
-		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "move constructor moves byte", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FilePath = TEXT("Test\\Path");
-			File TestFile(FilePath);
-			#endif
-			size_t SourceOffset = 0;
+		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "move constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			const size_t BufferLength = 10;
 			const size_t BufferCapacity = 20;
-			Buffer OriginalObject(std::move(TestFile), std::move(SourceOffset), BufferLength, BufferCapacity);
+			Buffer OriginalObject(BufferBacking::Memory, BufferLength, BufferCapacity);
 
-			const char* OriginalByteBufferAddress = OriginalObject.ByteBuffer.get();
+			const char* OriginalByteBufferAddress = OriginalObject.Storage.get();
 
 			Buffer TestObject = std::move(OriginalObject);
 
-			CurrentTest.MAX_TESTING_ASSERT(OriginalObject.ByteBuffer == nullptr);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBuffer.get() == OriginalByteBufferAddress);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferLength == BufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferCapacity == BufferCapacity);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Backing == BufferBacking::Memory);
+			CurrentTest.MAX_TESTING_ASSERT(OriginalObject.Storage == nullptr);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Storage.get() == OriginalByteBufferAddress);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Length == BufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Capacity == BufferCapacity);
 		}
 		});
 
-		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "copy assignment operator copies", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FilePath = TEXT("Test\\Path");
-			File TestFile(FilePath);
-			#endif
-			size_t SourceOffset = 0;
+		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "copy assignment", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			const size_t BufferLength = 10;
 			const size_t BufferCapacity = 20;
-			Buffer OriginalObject(std::move(TestFile), std::move(SourceOffset), BufferLength, BufferCapacity);
+			Buffer OriginalObject(BufferBacking::Memory, BufferLength, BufferCapacity);
 
 			for (size_t i = 0; i < BufferLength; i++)
 			{
-				OriginalObject.ByteBuffer[i] = static_cast<char>(i);
+				OriginalObject.Storage[i] = static_cast<char>(i);
 			}
 
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR SecondFilePath = TEXT("Test\\Path");
-			File SecondTestFile(SecondFilePath);
-			#endif
-			size_t SecondSourceOffset = 30;
 			const size_t SecondBufferLength = 40;
 			const size_t SecondBufferCapacity = 50;
-			Buffer TestObject(std::move(SecondTestFile), std::move(SecondSourceOffset), SecondBufferLength, SecondBufferCapacity);
+			Buffer TestObject(BufferBacking::Memory, SecondBufferLength, SecondBufferCapacity);
+
 			TestObject = OriginalObject;
 
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.SourceOffset == OriginalObject.SourceOffset);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferLength == OriginalObject.ByteBufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferCapacity == OriginalObject.ByteBufferCapacity);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Backing == OriginalObject.Backing);
 			for (size_t i = 0; i < BufferLength; i++)
 			{
-				CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBuffer[i] == OriginalObject.ByteBuffer[i]);
+				CurrentTest.MAX_TESTING_ASSERT(TestObject.Storage[i] == OriginalObject.Storage[i]);
 			}
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Length == OriginalObject.Length);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Capacity == OriginalObject.Capacity);
 		}
 		});
 
-		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "move assignment operator moves", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FilePath = TEXT("Test\\Path");
-			File TestFile(FilePath);
-			#endif
-			size_t SourceOffset = 0;
+		BufferTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "move assignment", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			const size_t BufferLength = 10;
 			const size_t BufferCapacity = 20;
-			Buffer OriginalObject(std::move(TestFile), std::move(SourceOffset), BufferLength, BufferCapacity);
-			const char* OriginalByteBufferAddress = OriginalObject.ByteBuffer.get();
-
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR SecondFilePath = TEXT("Test\\Path");
-			File SecondTestFile(SecondFilePath);
-			#endif
-			size_t SecondSourceOffset = 30;
+			Buffer OriginalObject(BufferBacking::Memory, BufferLength, BufferCapacity);
+			const char* OriginalByteBufferAddress = OriginalObject.Storage.get();
 			const size_t SecondBufferLength = 40;
 			const size_t SecondBufferCapacity = 50;
-
-			Buffer TestObject(std::move(SecondTestFile), std::move(SecondSourceOffset), SecondBufferLength, SecondBufferCapacity);
+			Buffer TestObject(BufferBacking::Memory, SecondBufferLength, SecondBufferCapacity);
 
 			TestObject = std::move(OriginalObject);
 
-			CurrentTest.MAX_TESTING_ASSERT(OriginalObject.ByteBuffer == nullptr);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBuffer.get() == OriginalByteBufferAddress);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferLength == BufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.ByteBufferCapacity == BufferCapacity);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Backing == BufferBacking::Memory);
+			CurrentTest.MAX_TESTING_ASSERT(OriginalObject.Storage == nullptr);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Storage.get() == OriginalByteBufferAddress);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Length == BufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.Capacity == BufferCapacity);
 		}
 		});
 

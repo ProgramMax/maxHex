@@ -14,7 +14,7 @@ namespace maxHex
 		max::Testing::CoutResultPolicy ResultPolicy;
 		auto FileTestSuite = max::Testing::TestSuite< max::Testing::CoutResultPolicy >{ "maxHex::File test suite", std::move(ResultPolicy) };
 
-		FileTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor copies path", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+		FileTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			#if defined(MAX_PLATFORM_WINDOWS)
 			LPCTSTR FilePath = TEXT("Test\Path");
 			File TestObject(FilePath);

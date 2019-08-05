@@ -121,9 +121,9 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		MaxWidth = 72 * CharWidth; // TODO: Find real value
 
 		size_t TotalSize = 0;
-		for (const maxHex::Buffer& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+		for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
 		{
-			TotalSize += CurrentBuffer.ByteBufferLength;
+			TotalSize += CurrentBuffer->Length;
 		}
 		int LineCount = 0;
 		if (TotalSize != 0) {
@@ -141,9 +141,9 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 	case WM_SIZE:
 	{
 		size_t TotalSize = 0;
-		for (const maxHex::Buffer& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+		for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
 		{
-			TotalSize += CurrentBuffer.ByteBufferLength;
+			TotalSize += CurrentBuffer->Length;
 		}
 		int LineCount = 0;
 		if (TotalSize != 0) {
@@ -212,9 +212,9 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 
 
 		size_t TotalSize = 0;
-		for (const maxHex::Buffer& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+		for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
 		{
-			TotalSize += CurrentBuffer.ByteBufferLength;
+			TotalSize += CurrentBuffer->Length;
 		}
 		int LineCount = 0;
 		if (TotalSize != 0) {
@@ -331,9 +331,9 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
 
 		size_t TotalSize = 0;
-		for (const maxHex::Buffer& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+		for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
 		{
-			TotalSize += CurrentBuffer.ByteBufferLength;
+			TotalSize += CurrentBuffer->Length;
 		}
 		int LineCount = 0;
 		if (TotalSize != 0) {
@@ -390,9 +390,9 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 		HFONT OldFont = (HFONT)SelectObject(DeviceContext, NewFont);
 
 		size_t TotalSize = 0;
-		for (const maxHex::Buffer& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+		for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
 		{
-			TotalSize += CurrentBuffer.ByteBufferLength;
+			TotalSize += CurrentBuffer->Length;
 		}
 		int LineCount = 0;
 		if (TotalSize != 0) {
@@ -449,14 +449,14 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 			for (int j = 0; j < BytesOnThisLine; j++)
 			{
 				size_t BufferIndex = (i * 16) + j;
-				while (AccumulatedBufferSize + TestWorkspace.Buffers.BufferList[CurrentBuffer].ByteBufferLength <= BufferIndex)
+				while (AccumulatedBufferSize + TestWorkspace.Buffers.BufferList[CurrentBuffer]->Length <= BufferIndex)
 				{
-					AccumulatedBufferSize += TestWorkspace.Buffers.BufferList[CurrentBuffer].ByteBufferLength;
+					AccumulatedBufferSize += TestWorkspace.Buffers.BufferList[CurrentBuffer]->Length;
 					CurrentBuffer++;
 				}
 				BufferIndex -= AccumulatedBufferSize;
 
-				const unsigned char CurrentChar = TestWorkspace.Buffers.BufferList[CurrentBuffer].ByteBuffer[BufferIndex];
+				const unsigned char CurrentChar = TestWorkspace.Buffers.BufferList[CurrentBuffer]->Storage[BufferIndex];
 				size_t HighNibble = CurrentChar >> 4;
 				size_t  LowNibble = CurrentChar & 0x0f;
 				TextOutA(DeviceContext, (CharWidth * (12 + (3 * j) + 0)) - (HorizontalScrollPosition * CharWidth), Height, &HexString[HighNibble], 1);
@@ -482,9 +482,9 @@ LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam,
 
 			TestWorkspace = maxHex::CreateWorkspaceFromFile(Buffer);
 			size_t TotalSize = 0;
-			for (const maxHex::Buffer& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+			for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
 			{
-				TotalSize += CurrentBuffer.ByteBufferLength;
+				TotalSize += CurrentBuffer->Length;
 			}
 			int LineCount = (TotalSize / 16) + 1;
 			SetScrollRange(WindowHandle, SB_VERT, 0, LineCount - 1, FALSE);

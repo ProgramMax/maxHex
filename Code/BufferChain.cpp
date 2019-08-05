@@ -4,24 +4,48 @@
 
 #include "BufferChain.hpp"
 #include <utility>
+#include <algorithm>
 
 namespace maxHex
 {
 
-	BufferChain::BufferChain()
+	BufferChain::BufferChain() noexcept
 		: BufferList()
 	{
 	}
 
-	BufferChain::BufferChain(Buffer InitialBuffer)
+	BufferChain::BufferChain(const BufferChain& rhs) noexcept
 		: BufferList()
 	{
-		BufferList.push_back(std::move(InitialBuffer));
+		BufferList.reserve(rhs.BufferList.size());
+		for (const std::unique_ptr<Buffer>& CurrentBuffer : rhs.BufferList)
+		{
+			auto CopiedBuffer = std::make_unique<Buffer>(*CurrentBuffer);
+			BufferList.push_back(std::move(CopiedBuffer));
+		}
 	}
 
-	BufferChain::BufferChain(std::vector<Buffer> BufferList)
+	BufferChain::BufferChain(BufferChain&& rhs) noexcept = default;
+	BufferChain::~BufferChain() noexcept = default;
+
+	BufferChain::BufferChain(std::vector<std::unique_ptr<Buffer>> BufferList) noexcept
 		: BufferList(std::move(BufferList))
 	{
 	}
+
+	BufferChain& BufferChain::operator =(const BufferChain& rhs) noexcept
+	{
+		BufferList = std::vector<std::unique_ptr<Buffer>>{};
+		BufferList.reserve(rhs.BufferList.size());
+		for (const std::unique_ptr<Buffer>& CurrentBuffer : rhs.BufferList)
+		{
+			auto CopiedBuffer = std::make_unique<Buffer>(*CurrentBuffer);
+			BufferList.push_back(std::move(CopiedBuffer));
+		}
+
+		return *this;
+	}
+
+	BufferChain& BufferChain::operator =(BufferChain&& rhs) noexcept = default;
 
 } // namespace maxHex

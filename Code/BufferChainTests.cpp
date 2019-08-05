@@ -16,63 +16,117 @@ namespace maxHex
 		max::Testing::CoutResultPolicy ResultPolicy;
 		auto BufferChainTestSuite = max::Testing::TestSuite< max::Testing::CoutResultPolicy >{ "maxhex::BufferChain test suite", std::move(ResultPolicy) };
 
-		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "default constructor empties buffer list", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "default constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			BufferChain TestObject;
 
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList.size() == 0);
 			}
 		});
 
-		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor consumes buffer", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FilePath = TEXT("Test\\Path");
-			File TestFile(FilePath);
-			#endif
-			size_t SourceOffset = 0;
+		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "copy constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			const size_t BufferLength = 10;
 			const size_t BufferCapacity = 20;
-			Buffer BufferToConsume(std::move(TestFile), std::move(SourceOffset), BufferLength, BufferCapacity);
+			auto TestBuffer = std::make_unique<Buffer>(BufferBacking::Memory, BufferLength, BufferCapacity);
+			std::vector<std::unique_ptr<Buffer>> Buffers;
+			Buffers.push_back(std::move(TestBuffer));
+			BufferChain OriginalObject(std::move(Buffers));
 
-			char const* MemoryLocation = BufferToConsume.ByteBuffer.get();
+			BufferChain TestObject(OriginalObject);
 
-			BufferChain TestObject(std::move(BufferToConsume));
-
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBuffer.get() == MemoryLocation);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferLength == BufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferCapacity == BufferCapacity);
-			CurrentTest.MAX_TESTING_ASSERT(BufferToConsume.ByteBuffer == nullptr);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList.size() == OriginalObject.BufferList.size());
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Length == OriginalObject.BufferList[0]->Length);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Capacity == OriginalObject.BufferList[0]->Capacity);
 			}
 		});
 
-		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor consumes buffer list", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
-			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FirstFilePath = TEXT("Test\\Path");
-			LPCTSTR SecondFilePath = TEXT("Test\\Path");
-			File FirstTestFile(FirstFilePath);
-			File SecondTestFile(SecondFilePath);
-			#endif
-			size_t FirstSourceOffset = 0;
-			size_t SecondSourceOffset = 10;
-			const size_t FirstBufferLength = 20;
-			const size_t SecondBufferLength = 30;
-			const size_t FirstBufferCapacity = 40;
-			const size_t SecondBufferCapacity = 50;
-			std::vector<Buffer> BufferListToConsume;
-			BufferListToConsume.emplace_back(std::move(FirstTestFile), std::move(FirstSourceOffset), FirstBufferLength, FirstBufferCapacity);
-			BufferListToConsume.emplace_back(std::move(SecondTestFile), std::move(SecondSourceOffset), SecondBufferLength, SecondBufferCapacity);
+		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "move constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+			const size_t BufferLength = 10;
+			const size_t BufferCapacity = 20;
+			auto TestBuffer = std::make_unique<Buffer>(BufferBacking::Memory, BufferLength, BufferCapacity);
+			char const* MemoryLocation = TestBuffer->Storage.get();
+			std::vector<std::unique_ptr<Buffer>> Buffers;
+			Buffers.push_back(std::move(TestBuffer));
+			BufferChain OriginalObject(std::move(Buffers));
 
-			char const* FirstMemoryLocation = BufferListToConsume[0].ByteBuffer.get();
-			char const* SecondMemoryLocation = BufferListToConsume[1].ByteBuffer.get();
+			BufferChain TestObject(std::move(OriginalObject));
 
-			BufferChain TestObject(std::move(BufferListToConsume));
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Storage.get() == MemoryLocation);
+			CurrentTest.MAX_TESTING_ASSERT(OriginalObject.BufferList.size() == 0);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList.size() == 1);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Length == BufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Capacity == BufferCapacity);
+			}
+		});
 
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBuffer.get() == FirstMemoryLocation);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferLength == FirstBufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0].ByteBufferCapacity == FirstBufferCapacity);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1].ByteBuffer.get() == SecondMemoryLocation);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1].ByteBufferLength == SecondBufferLength);
-			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1].ByteBufferCapacity == SecondBufferCapacity);
-			CurrentTest.MAX_TESTING_ASSERT(BufferListToConsume.size() == 0);
+		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+			const size_t FirstBufferLength = 10;
+			const size_t SecondBufferLength = 20;
+			const size_t FirstBufferCapacity = 30;
+			const size_t SecondBufferCapacity = 40;
+			auto FirstBuffer = std::make_unique<Buffer>(BufferBacking::Memory, FirstBufferLength, FirstBufferCapacity);
+			auto SecondBuffer = std::make_unique<Buffer>(BufferBacking::Memory, SecondBufferLength, SecondBufferCapacity);
+			char const* FirstMemoryLocation = FirstBuffer->Storage.get();
+			char const* SecondMemoryLocation = SecondBuffer->Storage.get();
+			std::vector<std::unique_ptr<Buffer>> Buffers;
+			Buffers.push_back(std::move(FirstBuffer));
+			Buffers.push_back(std::move(SecondBuffer));
+
+			BufferChain TestObject(std::move(Buffers));
+
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Storage.get() == FirstMemoryLocation);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Length == FirstBufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Capacity == FirstBufferCapacity);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1]->Storage.get() == SecondMemoryLocation);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1]->Length == SecondBufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[1]->Capacity == SecondBufferCapacity);
+			CurrentTest.MAX_TESTING_ASSERT(Buffers.size() == 0);
+			}
+		});
+
+		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "copy assignment operator", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+			const size_t OriginalBufferLength = 10;
+			const size_t OriginalBufferCapacity = 20;
+			auto OriginalBuffer = std::make_unique<Buffer>(BufferBacking::Memory, OriginalBufferLength, OriginalBufferCapacity);
+			std::vector<std::unique_ptr<Buffer>> OriginalBufferList;
+			OriginalBufferList.push_back(std::move(OriginalBuffer));
+			BufferChain OriginalObject(std::move(OriginalBufferList));
+
+			const size_t TestBufferLength = 30;
+			const size_t TestBufferCapacity = 40;
+			auto TestBuffer = std::make_unique<Buffer>(BufferBacking::Memory, TestBufferLength, TestBufferCapacity);
+			std::vector<std::unique_ptr<Buffer>> TestBufferList;
+			TestBufferList.push_back(std::move(TestBuffer));
+			BufferChain TestObject(std::move(TestBufferList));
+
+			TestObject = OriginalObject;
+
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList.size() == OriginalObject.BufferList.size());
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Length == OriginalObject.BufferList[0]->Length);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Capacity == OriginalObject.BufferList[0]->Capacity);
+			}
+		});
+
+		BufferChainTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "move constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
+			const size_t OriginalBufferLength = 10;
+			const size_t OriginalBufferCapacity = 20;
+			auto OriginalBuffer = std::make_unique<Buffer>(BufferBacking::Memory, OriginalBufferLength, OriginalBufferCapacity);
+			std::vector<std::unique_ptr<Buffer>> OriginalBufferList;
+			OriginalBufferList.push_back(std::move(OriginalBuffer));
+			BufferChain OriginalObject(std::move(OriginalBufferList));
+
+			const size_t TestBufferLength = 30;
+			const size_t TestBufferCapacity = 40;
+			auto TestBuffer = std::make_unique<Buffer>(BufferBacking::Memory, TestBufferLength, TestBufferCapacity);
+			std::vector<std::unique_ptr<Buffer>> TestBufferList;
+			TestBufferList.push_back(std::move(TestBuffer));
+			BufferChain TestObject(std::move(TestBufferList));
+
+			TestObject = std::move(OriginalObject);
+
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList.size() == 1);
+			CurrentTest.MAX_TESTING_ASSERT(OriginalObject.BufferList.size() == 0);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Length == OriginalBufferLength);
+			CurrentTest.MAX_TESTING_ASSERT(TestObject.BufferList[0]->Capacity == OriginalBufferCapacity);
 			}
 		});
 
