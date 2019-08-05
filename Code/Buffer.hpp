@@ -5,7 +5,7 @@
 #ifndef MAXHEX_BUFFER_HPP
 #define MAXHEX_BUFFER_HPP
 
-#include "File.hpp"
+#include "BufferBacking.hpp"
 #include <memory>
 
 namespace maxHex
@@ -15,19 +15,18 @@ namespace maxHex
 	{
 	public:
 
-		Buffer(File SourceFile, size_t SourceOffset, const size_t BufferLength, const size_t BufferCapacity) noexcept;
+		Buffer(const BufferBacking Backing, const size_t Length, const size_t Capacity) noexcept;
 		Buffer(const Buffer& rhs) noexcept;
 		Buffer(Buffer&& rhs) noexcept;
-		~Buffer() noexcept = default;
+		~Buffer() noexcept;
 
 		Buffer& operator =(const Buffer& rhs) noexcept;
 		Buffer& operator =(Buffer&& rhs) noexcept;
 
-		File SourceFile;
-		size_t SourceOffset;
-		std::unique_ptr<char[]> ByteBuffer;
-		size_t ByteBufferLength;
-		size_t ByteBufferCapacity;
+		BufferBacking Backing;
+		std::unique_ptr<char[]> Storage;
+		size_t Length;
+		size_t Capacity;
 
 	};
 

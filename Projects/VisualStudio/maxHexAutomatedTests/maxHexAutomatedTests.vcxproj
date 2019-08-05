@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Code\BufferChainTests.cpp" />
     <ClCompile Include="..\..\..\Code\BufferTests.cpp" />
+    <ClCompile Include="..\..\..\Code\FileBackedBufferTests.cpp" />
     <ClCompile Include="..\..\..\Code\FileTests.cpp" />
     <ClCompile Include="..\..\..\Code\TestEntryPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\BufferChainTests.hpp" />
     <ClInclude Include="..\..\..\Code\BufferTests.hpp" />
+    <ClInclude Include="..\..\..\Code\FileBackedBufferTests.hpp" />
     <ClInclude Include="..\..\..\Code\FileTests.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

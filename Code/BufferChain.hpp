@@ -7,6 +7,7 @@
 
 #include "Buffer.hpp"
 #include <vector>
+#include <memory>
 
 namespace maxHex
 {
@@ -15,11 +16,16 @@ namespace maxHex
 	{
 	public:
 
-		BufferChain();
-		explicit BufferChain(Buffer InitialBuffer);
-		explicit BufferChain(std::vector<Buffer> BufferList);
+		BufferChain() noexcept;
+		BufferChain(const BufferChain& rhs) noexcept;
+		BufferChain(BufferChain&& rhs) noexcept;
+		explicit BufferChain(std::vector<std::unique_ptr<Buffer>> BufferList) noexcept;
+		~BufferChain() noexcept;
 
-		std::vector<Buffer> BufferList;
+		BufferChain& operator =(const BufferChain& rhs) noexcept;
+		BufferChain& operator =(BufferChain&& rhs) noexcept;
+
+		std::vector<std::unique_ptr<Buffer>> BufferList;
 
 	};
 

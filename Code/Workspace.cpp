@@ -5,8 +5,11 @@
 #include "Workspace.hpp"
 
 #include <Windows.h>
+#include <vector>
+#include <memory>
 #include <utility>
 #include "File.hpp"
+#include "FileBackedBuffer.hpp"
 
 namespace maxHex
 {
@@ -30,19 +33,20 @@ namespace maxHex
 		File SourceFile(FilePath);
 		DWORD TotalSizeRead = 0;
 		size_t SourceOffset = 0;
-		std::vector<Buffer> FileBuffers;
+		std::vector<std::unique_ptr<Buffer>> FileBuffers;
 		const size_t ReadChunkSizeInBytes = 4 * 1024;
 
 		HANDLE FileHandle = CreateFile(FilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 		DWORD FileSize = GetFileSize(FileHandle, NULL);
 		while (TotalSizeRead < FileSize) {
 			SourceOffset = TotalSizeRead;
-			FileBuffers.emplace_back(std::move(SourceFile), SourceOffset, 0, ReadChunkSizeInBytes);
+			auto CurrentBuffer = std::make_unique<FileBackedBuffer>(std::move(SourceFile), SourceOffset, 0, ReadChunkSizeInBytes);
+			FileBuffers.push_back(std::move(CurrentBuffer));
 
-			void* buff = FileBuffers.back().ByteBuffer.get();
+			void* buff = FileBuffers.back()->Storage.get();
 			DWORD SizeRead = 0;
 			ReadFile(FileHandle, (void*)buff, ReadChunkSizeInBytes, &SizeRead, NULL);
-			FileBuffers.back().ByteBufferLength = SizeRead;
+			FileBuffers.back()->Length = SizeRead;
 			if (ReadChunkSizeInBytes != SizeRead) {
 				// TODO: Allow buffers to contain more data than they use
 			}
