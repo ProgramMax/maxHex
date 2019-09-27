@@ -7,11 +7,20 @@
 namespace maxHex
 {
 
+
+	File::File(const File& rhs) noexcept = default;
+	File::File(File&& rhs) noexcept = default;
+
 	#if defined(MAX_PLATFORM_WINDOWS)
-	File::File(LPCTSTR FilePath)
+	File::File(LPCTSTR FilePath) noexcept
 		: FilePath(FilePath)
 	{
 	}
 	#endif
+
+	File::~File() noexcept = default;
+
+	File& File::operator =(const File& rhs) noexcept = default;
+	File& File::operator =(File&& rhs) noexcept = default;
 
 } // namespace maxHex

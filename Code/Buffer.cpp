@@ -29,15 +29,8 @@ namespace maxHex
 		std::copy(rhs.ByteBuffer.get(), rhs.ByteBuffer.get() + rhs.ByteBufferLength, ByteBuffer.get());
 	}
 
-	Buffer::Buffer(Buffer&& rhs) noexcept
-		: SourceFile(std::move(rhs.SourceFile))
-		, SourceOffset(std::move(rhs.SourceOffset))
-		, ByteBuffer(std::move(rhs.ByteBuffer))
-		, ByteBufferLength(std::move(rhs.ByteBufferLength))
-		, ByteBufferCapacity(std::move(rhs.ByteBufferCapacity))
-	{
-		rhs.ByteBuffer = nullptr;
-	}
+	Buffer::Buffer(Buffer&& rhs) noexcept = default;
+	Buffer::~Buffer() noexcept = default;
 
 	Buffer& Buffer::operator =(const Buffer& rhs) noexcept
 	{
@@ -52,16 +45,6 @@ namespace maxHex
 		return *this;
 	}
 
-	Buffer& Buffer::operator =(Buffer&& rhs) noexcept
-	{
-		SourceFile = std::move(rhs.SourceFile);
-		SourceOffset = std::move(rhs.SourceOffset);
-		ByteBuffer = std::move(rhs.ByteBuffer);
-		rhs.ByteBuffer = nullptr;
-		ByteBufferLength = std::move(rhs.ByteBufferLength);
-		ByteBufferCapacity = std::move(rhs.ByteBufferCapacity);
-
-		return *this;
-	}
+	Buffer& Buffer::operator =(Buffer&& rhs) noexcept = default;
 
 } // namespace maxHex

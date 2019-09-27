@@ -8,20 +8,23 @@
 namespace maxHex
 {
 
-	BufferChain::BufferChain()
-		: BufferList()
-	{
-	}
+	BufferChain::BufferChain() noexcept = default;
 
-	BufferChain::BufferChain(Buffer InitialBuffer)
+	BufferChain::BufferChain(Buffer InitialBuffer) noexcept
 		: BufferList()
 	{
 		BufferList.push_back(std::move(InitialBuffer));
 	}
 
-	BufferChain::BufferChain(std::vector<Buffer> BufferList)
+	BufferChain::BufferChain(std::vector<Buffer> BufferList) noexcept
 		: BufferList(std::move(BufferList))
 	{
 	}
+
+	BufferChain::BufferChain(const BufferChain& rhs) = default;
+	BufferChain::BufferChain(BufferChain&& rhs) noexcept = default;
+
+	BufferChain& BufferChain::operator =(const BufferChain& rhs) = default;
+	BufferChain& BufferChain::operator =(BufferChain&& rhs) noexcept = default;
 
 } // namespace maxHex

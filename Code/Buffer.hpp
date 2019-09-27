@@ -5,7 +5,7 @@
 #ifndef MAXHEX_BUFFER_HPP
 #define MAXHEX_BUFFER_HPP
 
-#include "File.hpp"
+#include <File.hpp>
 #include <memory>
 
 namespace maxHex
@@ -15,10 +15,11 @@ namespace maxHex
 	{
 	public:
 
+		Buffer() = delete;
 		Buffer(File SourceFile, size_t SourceOffset, const size_t BufferLength, const size_t BufferCapacity) noexcept;
 		Buffer(const Buffer& rhs) noexcept;
 		Buffer(Buffer&& rhs) noexcept;
-		~Buffer() noexcept = default;
+		~Buffer() noexcept;
 
 		Buffer& operator =(const Buffer& rhs) noexcept;
 		Buffer& operator =(Buffer&& rhs) noexcept;

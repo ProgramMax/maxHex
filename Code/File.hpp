@@ -18,9 +18,17 @@ namespace maxHex
 	{
 	public:
 
+		File() = delete;
+		File(const File& rhs) noexcept;
+		File(File&& rhs) noexcept;
 		#if defined(MAX_PLATFORM_WINDOWS)
-		explicit File(LPCTSTR FilePath);
+		explicit File(LPCTSTR FilePath) noexcept;
 		#endif
+		~File() noexcept;
+
+		File& operator =(const File& rhs) noexcept;
+		File& operator =(File&& rhs) noexcept;
+
 
 		#if defined(MAX_PLATFORM_WINDOWS)
 		LPCTSTR FilePath;

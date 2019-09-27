@@ -15,9 +15,14 @@ namespace maxHex
 	{
 	public:
 
-		BufferChain();
-		explicit BufferChain(Buffer InitialBuffer);
-		explicit BufferChain(std::vector<Buffer> BufferList);
+		BufferChain() noexcept;
+		explicit BufferChain(Buffer InitialBuffer) noexcept;
+		explicit BufferChain(std::vector<Buffer> BufferList) noexcept;
+		BufferChain(const BufferChain& rhs);
+		BufferChain(BufferChain&& rhs) noexcept;
+
+		BufferChain& operator =(const BufferChain& rhs);
+		BufferChain& operator =(BufferChain&& rhs) noexcept;
 
 		std::vector<Buffer> BufferList;
 
