@@ -305,7 +305,17 @@ namespace
 
 			FillRect(DeviceContext, &PaintStruct.rcPaint, (HBRUSH)GetStockObject(COLOR_APPWORKSPACE));
 
-			HFONT NewFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
+			// Windows Vista+ comes with Consolas
+			LOGFONT lf = { 0 };
+			for (size_t i = 0; i < 9; i++) {
+				lf.lfFaceName[i] = "Consolas"[i];
+			}
+			lf.lfHeight = 14;
+			HFONT NewFont = CreateFontIndirect(&lf);
+			if (NewFont == NULL)
+			{
+				NewFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
+			}
 			HFONT OldFont = (HFONT)SelectObject(DeviceContext, NewFont);
 
 			size_t TotalSize = 0;
