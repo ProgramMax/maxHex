@@ -16,7 +16,7 @@ namespace maxHex
 
 		FileTestSuite.AddTest(max::Testing::Test< max::Testing::CoutResultPolicy >{ "constructor", [](max::Testing::Test< max::Testing::CoutResultPolicy >& CurrentTest, max::Testing::CoutResultPolicy const& ResultPolicy) {
 			#if defined(MAX_PLATFORM_WINDOWS)
-			LPCTSTR FilePath = TEXT("Test\Path");
+			LPCTSTR FilePath = TEXT("Test\\Path");
 			File TestObject(FilePath);
 
 			CurrentTest.MAX_TESTING_ASSERT(TestObject.FilePath == FilePath);

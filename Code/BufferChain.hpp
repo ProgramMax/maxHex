@@ -17,12 +17,13 @@ namespace maxHex
 	public:
 
 		BufferChain() noexcept;
-		BufferChain(const BufferChain& rhs) noexcept;
-		BufferChain(BufferChain&& rhs) noexcept;
 		explicit BufferChain(std::vector<std::unique_ptr<Buffer>> BufferList) noexcept;
+		BufferChain(const BufferChain& rhs) noexcept = delete;
+		BufferChain(BufferChain&& rhs) noexcept;
+		
 		~BufferChain() noexcept;
 
-		BufferChain& operator =(const BufferChain& rhs) noexcept;
+		BufferChain& operator =(const BufferChain& rhs) noexcept = delete;
 		BufferChain& operator =(BufferChain&& rhs) noexcept;
 
 		std::vector<std::unique_ptr<Buffer>> BufferList;

@@ -9,43 +9,47 @@
 namespace maxHex
 {
 
-	BufferChain::BufferChain() noexcept
-		: BufferList()
-	{
-	}
-
-	BufferChain::BufferChain(const BufferChain& rhs) noexcept
-		: BufferList()
-	{
-		BufferList.reserve(rhs.BufferList.size());
-		for (const std::unique_ptr<Buffer>& CurrentBuffer : rhs.BufferList)
-		{
-			auto CopiedBuffer = std::make_unique<Buffer>(*CurrentBuffer);
-			BufferList.push_back(std::move(CopiedBuffer));
-		}
-	}
-
-	BufferChain::BufferChain(BufferChain&& rhs) noexcept = default;
-	BufferChain::~BufferChain() noexcept = default;
+	BufferChain::BufferChain() noexcept = default;
 
 	BufferChain::BufferChain(std::vector<std::unique_ptr<Buffer>> BufferList) noexcept
 		: BufferList(std::move(BufferList))
 	{
 	}
 
+	/*
+	BufferChain::BufferChain(const BufferChain & rhs) noexcept
+		: BufferList()
+	{
+		BufferList.reserve(rhs.BufferList.size());
+		for (const std::unique_ptr<Buffer>& CurrentBuffer : rhs.BufferList)
+		{
+			// TODO: This should really call ->Clone() since Buffer is a base class.
+			auto CopiedBuffer = std::make_unique<Buffer>(*CurrentBuffer);
+			BufferList.push_back(std::move(CopiedBuffer));
+		}
+	}
+	*/
+
+	BufferChain::BufferChain(BufferChain&& rhs) noexcept = default;
+	BufferChain::~BufferChain() noexcept = default;
+
+	/*
 	BufferChain& BufferChain::operator =(const BufferChain& rhs) noexcept
 	{
 		BufferList = std::vector<std::unique_ptr<Buffer>>{};
 		BufferList.reserve(rhs.BufferList.size());
 		for (const std::unique_ptr<Buffer>& CurrentBuffer : rhs.BufferList)
 		{
+			// TODO: This should really call ->Clone() since Buffer is a base class.
 			auto CopiedBuffer = std::make_unique<Buffer>(*CurrentBuffer);
 			BufferList.push_back(std::move(CopiedBuffer));
 		}
 
 		return *this;
 	}
+	*/
 
+	BufferChain& BufferChain::operator =(const BufferChain& rhs) = default;
 	BufferChain& BufferChain::operator =(BufferChain&& rhs) noexcept = default;
 
 } // namespace maxHex

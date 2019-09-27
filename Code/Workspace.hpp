@@ -5,12 +5,8 @@
 #ifndef MAXHEX_WORKSPACE_HPP
 #define MAXHEX_WORKSPACE_HPP
 
-#include <max/Compiling/Configuration.hpp>
-#if defined(MAX_PLATFORM_WINDOWS)
-#include <Windows.h>
-#endif
-
-#include "BufferChain.hpp"
+#include <BufferChain.hpp>
+#include <File.hpp>
 
 namespace maxHex
 {
@@ -19,22 +15,20 @@ namespace maxHex
 	{
 	public:
 
-		Workspace();
+		Workspace() noexcept;
+		explicit Workspace(BufferChain Buffers) noexcept;
 		Workspace(const Workspace& rhs);
-		Workspace(Workspace&& rhs);
-		explicit Workspace(BufferChain Buffers);
-		~Workspace();
+		Workspace(Workspace&& rhs) noexcept;
+		~Workspace() noexcept;
 
 		Workspace& operator =(const Workspace& rhs);
-		Workspace& operator =(Workspace&& rhs);
+		Workspace& operator =(Workspace&& rhs) noexcept;
 
 		BufferChain Buffers;
 
 	};
 
-	#if defined(MAX_PLATFORM_WINDOWS)
-	Workspace CreateWorkspaceFromFile(LPCTSTR FilePath);
-	#endif
+	Workspace CreateWorkspaceFromFile(File FileToOpen) noexcept;
 
 } // namespace maxHex
 

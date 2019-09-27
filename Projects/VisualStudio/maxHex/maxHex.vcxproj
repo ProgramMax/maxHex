@@ -34,6 +34,7 @@
     <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
     <ClCompile Include="..\..\..\Code\File.cpp" />
     <ClCompile Include="..\..\..\Code\FileBackedBuffer.cpp" />
+    <ClCompile Include="..\..\..\Code\Window.cpp" />
     <ClCompile Include="..\..\..\Code\Workspace.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +43,7 @@
     <ClInclude Include="..\..\..\Code\BufferChain.hpp" />
     <ClInclude Include="..\..\..\Code\File.hpp" />
     <ClInclude Include="..\..\..\Code\FileBackedBuffer.hpp" />
+    <ClInclude Include="..\..\..\Code\Window.hpp" />
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -104,7 +106,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -112,7 +114,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,7 +122,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,7 +130,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,6 +143,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,6 +160,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,6 +179,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,6 +200,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
