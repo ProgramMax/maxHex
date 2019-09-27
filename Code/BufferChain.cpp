@@ -49,7 +49,6 @@ namespace maxHex
 	}
 	*/
 
-	BufferChain& BufferChain::operator =(const BufferChain& rhs) = default;
 	BufferChain& BufferChain::operator =(BufferChain&& rhs) noexcept = default;
 
 } // namespace maxHex

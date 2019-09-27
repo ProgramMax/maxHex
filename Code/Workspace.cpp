@@ -26,11 +26,13 @@ namespace maxHex
 	{
 	}
 
-	Workspace::Workspace(const Workspace& rhs) = default;
+	// TODO: Make BufferChain's copy ctor work
+	//Workspace::Workspace(const Workspace& rhs) noexcept = default;
 	Workspace::Workspace(Workspace&& rhs) noexcept = default;
 
 	Workspace::~Workspace() noexcept = default;
-	Workspace& Workspace::operator =(const Workspace& rhs) = default;
+	// TODO: Make BufferChain's copy ctor work
+	//Workspace& Workspace::operator =(const Workspace& rhs) noexcept = default;
 	Workspace& Workspace::operator =(Workspace&& rhs) noexcept = default;
 
 	#if defined(MAX_PLATFORM_WINDOWS)

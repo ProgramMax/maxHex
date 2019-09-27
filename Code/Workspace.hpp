@@ -17,11 +17,13 @@ namespace maxHex
 
 		Workspace() noexcept;
 		explicit Workspace(BufferChain Buffers) noexcept;
-		Workspace(const Workspace& rhs);
+		// TODO: Make BufferChain's copy ctor work
+		Workspace(const Workspace& rhs) noexcept = delete;
 		Workspace(Workspace&& rhs) noexcept;
 		~Workspace() noexcept;
 
-		Workspace& operator =(const Workspace& rhs);
+		// TODO: Make BufferChain's copy ctor work
+		Workspace& operator =(const Workspace& rhs) noexcept = delete;
 		Workspace& operator =(Workspace&& rhs) noexcept;
 
 		BufferChain Buffers;
