@@ -12,10 +12,11 @@ namespace maxHex
 	{
 	public:
 
+		FileBackedBuffer() = delete;
 		FileBackedBuffer(File SourceFile, size_t SourceOffset, const size_t BufferLength, const size_t BufferCapacity) noexcept;
 		FileBackedBuffer(const FileBackedBuffer& rhs) noexcept;
 		FileBackedBuffer(FileBackedBuffer&& rhs) noexcept;
-		~FileBackedBuffer() noexcept;
+		~FileBackedBuffer() noexcept override;
 
 		FileBackedBuffer& operator =(const FileBackedBuffer& rhs) noexcept;
 		FileBackedBuffer& operator =(FileBackedBuffer&& rhs) noexcept;

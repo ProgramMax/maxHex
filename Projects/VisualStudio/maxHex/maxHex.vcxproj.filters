@@ -64,6 +64,9 @@
     <ClCompile Include="..\..\..\Code\FileBackedBuffer.cpp">
       <Filter>Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Code\Window.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp">
@@ -82,6 +85,9 @@
       <Filter>Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Code\FileBackedBuffer.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\Window.hpp">
       <Filter>Code</Filter>
     </ClInclude>
   </ItemGroup>

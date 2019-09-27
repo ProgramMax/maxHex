@@ -5,7 +5,9 @@
 #ifndef MAXHEX_BUFFER_HPP
 #define MAXHEX_BUFFER_HPP
 
+
 #include "BufferBacking.hpp"
+
 #include <memory>
 
 namespace maxHex
@@ -15,13 +17,17 @@ namespace maxHex
 	{
 	public:
 
+		Buffer() = delete;
 		Buffer(const BufferBacking Backing, const size_t Length, const size_t Capacity) noexcept;
 		Buffer(const Buffer& rhs) noexcept;
 		Buffer(Buffer&& rhs) noexcept;
-		~Buffer() noexcept;
+		virtual ~Buffer() noexcept;
 
 		Buffer& operator =(const Buffer& rhs) noexcept;
 		Buffer& operator =(Buffer&& rhs) noexcept;
+
+		// TODO: Being a base class, should this have virtual std::unique_ptr<Base> Clone(); ?
+		// It would be needed for BufferChain to have a copy ctor/assign.
 
 		BufferBacking Backing;
 		std::unique_ptr<char[]> Storage;
