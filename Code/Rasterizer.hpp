@@ -7,6 +7,7 @@
 #include <Windows.h>
 #endif
 #include "BufferChain.hpp"
+#include "Font.hpp"
 #include "UserInteractionState.hpp"
 
 namespace maxHex
@@ -16,7 +17,7 @@ namespace maxHex
 	{
 	public:
 
-		static Rasterizer Create(HDC DeviceContext) noexcept;
+		static Rasterizer Create(HDC DeviceContext, const maxHex::Font& font) noexcept;
 
 		Rasterizer() = delete;
 		Rasterizer(int CharacterHeight, int CharacterWidth) noexcept;

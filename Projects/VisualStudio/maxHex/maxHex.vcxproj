@@ -34,6 +34,7 @@
     <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
     <ClCompile Include="..\..\..\Code\File.cpp" />
     <ClCompile Include="..\..\..\Code\FileBackedBuffer.cpp" />
+    <ClCompile Include="..\..\..\Code\Font.cpp" />
     <ClCompile Include="..\..\..\Code\Rasterizer.cpp" />
     <ClCompile Include="..\..\..\Code\UserInteractionState.cpp" />
     <ClCompile Include="..\..\..\Code\Window.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="..\..\..\Code\BufferChain.hpp" />
     <ClInclude Include="..\..\..\Code\File.hpp" />
     <ClInclude Include="..\..\..\Code\FileBackedBuffer.hpp" />
+    <ClInclude Include="..\..\..\Code\Font.hpp" />
     <ClInclude Include="..\..\..\Code\Rasterizer.hpp" />
     <ClInclude Include="..\..\..\Code\UserInteractionState.hpp" />
     <ClInclude Include="..\..\..\Code\Window.hpp" />

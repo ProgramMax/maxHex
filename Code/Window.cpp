@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "Window.hpp"
 #include "Buffer.hpp"
-#include "Workspace.hpp"
-#include "UserInteractionState.hpp"
+#include "Font.hpp"
 #include "Rasterizer.hpp"
+#include "UserInteractionState.hpp"
+#include "Window.hpp"
+#include "Workspace.hpp"
 
 #include <strsafe.h>
 #include <algorithm>
@@ -18,7 +19,8 @@ namespace
 
 	maxHex::Workspace TestWorkspace;
 	maxHex::UserInteractionState TestUserInteractionState;
-	std::unique_ptr<maxHex::Rasterizer> TestRasterizer; // TODO: The Form should own thisas a non-unique_ptr
+	std::unique_ptr<maxHex::Rasterizer> TestRasterizer; // TODO: The Form should own this as a non-unique_ptr
+	std::unique_ptr<maxHex::Font> TestFont; // TODO: The Form should own this as a non-unique_ptr
 
 	LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam, LPARAM lParam)
 	{
@@ -35,7 +37,7 @@ namespace
 		{
 			HDC DeviceContext = GetDC(WindowHandle);
 
-			TestRasterizer = std::make_unique<maxHex::Rasterizer>(maxHex::Rasterizer::Create(DeviceContext));
+			TestRasterizer = std::make_unique<maxHex::Rasterizer>(maxHex::Rasterizer::Create(DeviceContext, *TestFont));
 			ReleaseDC(WindowHandle, DeviceContext);
 
 			MaxWidth = 72 * TestRasterizer->CharacterWidth; // TODO: Find real value
@@ -355,7 +357,7 @@ namespace
 
 		WNDCLASSEX WindowClass;
 		WindowClass.cbSize = sizeof(WindowClass);
-		WindowClass.style = CS_HREDRAW | CS_VREDRAW;
+		WindowClass.style = CS_HREDRAW | CS_VREDRAW | CS_CLASSDC;
 		WindowClass.lpfnWndProc = WindowProcedure;
 		WindowClass.cbClsExtra = 0;
 		WindowClass.cbWndExtra = 0;
@@ -375,17 +377,12 @@ namespace
 		HDC DeviceContext = CreateCompatibleDC(NULL);
 
 		// Windows Vista+ comes with Consolas
-		LOGFONT lf = { 0 };
-		for (size_t i = 0; i < 9; i++) {
-			lf.lfFaceName[i] = "Consolas"[i];
-		}
-		lf.lfHeight = 14;
-		HFONT NewFont = CreateFontIndirect(&lf);
-		if (NewFont == NULL)
+		TestFont = std::make_unique<maxHex::Font>(maxHex::Font::Create("Consolas", 14));
+		if (TestFont->font == NULL)
 		{
-			NewFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
+			TestFont->font = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
 		}
-		HFONT OldFont = (HFONT)SelectObject(DeviceContext, NewFont);
+		SelectObject(DeviceContext, TestFont->font);
 
 		TEXTMETRIC TextMetrics;
 		GetTextMetrics(DeviceContext, &TextMetrics);
@@ -397,7 +394,6 @@ namespace
 
 		int ClientWidth = CharWidth * 78 + VerticalScrollBarWidth;
 		int ClientHeight = CharHeight * 40;
-		SelectObject(DeviceContext, OldFont);
 		DeleteObject(DeviceContext);
 
 
