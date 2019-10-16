@@ -260,13 +260,15 @@ namespace
 			}
 			if (TestUserInteractionState.VerticalScrollOffset != ScrollInfo.nPos)
 			{
+				int ScrollDifference = TestUserInteractionState.VerticalScrollOffset - ScrollInfo.nPos;
+
 				TestUserInteractionState.VerticalScrollOffset = ScrollInfo.nPos;
 
 				RECT ScrollArea;
 				GetClientRect(WindowHandle, &ScrollArea);
 				// Leave the header
 				ScrollArea.top += TestRasterizer->CharacterHeight;
-				ScrollWindowEx(WindowHandle, 0, TestRasterizer->CharacterHeight * (TestUserInteractionState.VerticalScrollOffset - ScrollInfo.nPos), &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				ScrollWindowEx(WindowHandle, 0, TestRasterizer->CharacterHeight * ScrollDifference, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
 				UpdateWindow(WindowHandle);
 			}
 			return 0;
@@ -287,11 +289,13 @@ namespace
 
 			if (TestUserInteractionState.HorizontalScrollOffset != ScrollInfo.nPos)
 			{
+				int ScrollDifference = TestUserInteractionState.HorizontalScrollOffset - ScrollInfo.nPos;
+
 				TestUserInteractionState.HorizontalScrollOffset = ScrollInfo.nPos;
 
 				RECT ScrollArea;
 				GetClientRect(WindowHandle, &ScrollArea);
-				ScrollWindowEx(WindowHandle, TestRasterizer->CharacterWidth * (TestUserInteractionState.HorizontalScrollOffset - ScrollInfo.nPos), 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				ScrollWindowEx(WindowHandle, TestRasterizer->CharacterWidth * ScrollDifference, 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
 				UpdateWindow(WindowHandle);
 			}
 
