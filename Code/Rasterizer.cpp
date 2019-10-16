@@ -138,7 +138,6 @@ namespace maxHex
 		}
 
 		SelectObject(DeviceContext, OldFont);
-
 	}
 	#endif
 

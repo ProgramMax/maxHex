@@ -1,5 +1,5 @@
-#ifndef MAXHEX_RASTERER_HPP
-#define MAXHEX_RASTERER_HPP
+#ifndef MAXHEX_RASTERIZER_HPP
+#define MAXHEX_RASTERIZER_HPP
 
 #include <max/Compiling/Configuration.hpp>
 
@@ -39,4 +39,4 @@ namespace maxHex
 
 } // namespace maxHex
 
-#endif // #ifndef MAXHEX_RASTERER_HPP
+#endif // #ifndef MAXHEX_RASTERIZER_HPP
