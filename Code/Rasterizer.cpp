@@ -5,8 +5,10 @@
 namespace maxHex
 {
 
-	Rasterizer Rasterizer::Create(HDC DeviceContext) noexcept
+	Rasterizer Rasterizer::Create(HDC DeviceContext, const maxHex::Font& font) noexcept
 	{
+		SelectObject(DeviceContext, font.font);
+
 		TEXTMETRIC TextMetrics;
 		GetTextMetrics(DeviceContext, &TextMetrics);
 		int CharacterHeight = TextMetrics.tmHeight + TextMetrics.tmExternalLeading;
@@ -22,21 +24,8 @@ namespace maxHex
 	}
 
 	#if defined(MAX_PLATFORM_WINDOWS)
-	void Rasterizer::Rasterize(HWND WindowHandle,HDC DeviceContext, int VirtualTop, int VirtualLeft, int Height, int Width, const BufferChain& Buffers, const UserInteractionState& InteractionState) noexcept
+	void Rasterizer::Rasterize(HWND WindowHandle, HDC DeviceContext, int VirtualTop, int VirtualLeft, int Height, int Width, const BufferChain& Buffers, const UserInteractionState& InteractionState) noexcept
 	{
-		// Windows Vista+ comes with Consolas
-		LOGFONT lf = { 0 };
-		for (size_t i = 0; i < 9; i++) {
-			lf.lfFaceName[i] = "Consolas"[i];
-		}
-		lf.lfHeight = 14;
-		HFONT NewFont = CreateFontIndirect(&lf);
-		if (NewFont == NULL)
-		{
-			NewFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
-		}
-		HFONT OldFont = (HFONT)SelectObject(DeviceContext, NewFont);
-
 		RECT BlankRect;
 		BlankRect.top = VirtualTop;
 		BlankRect.left = VirtualLeft;
@@ -136,8 +125,6 @@ namespace maxHex
 				TextOutA(DeviceContext, (CharacterWidth * (47 + 12 + 3 + j)) - (InteractionState.HorizontalScrollOffset * CharacterWidth), Height, reinterpret_cast<const char*>(&CurrentChar), 1);
 			}
 		}
-
-		SelectObject(DeviceContext, OldFont);
 	}
 	#endif
 

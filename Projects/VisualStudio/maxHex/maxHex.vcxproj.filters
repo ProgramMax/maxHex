@@ -73,6 +73,9 @@
     <ClCompile Include="..\..\..\Code\Rasterizer.cpp">
       <Filter>Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Code\Font.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp">
@@ -100,6 +103,9 @@
       <Filter>Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Code\Rasterizer.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Code\Font.hpp">
       <Filter>Code</Filter>
     </ClInclude>
   </ItemGroup>
