@@ -5,6 +5,7 @@
 #include "Window.hpp"
 #include "Buffer.hpp"
 #include "Workspace.hpp"
+#include "UserInteractionState.hpp"
 
 #include <strsafe.h>
 #include <algorithm>
@@ -15,6 +16,7 @@ namespace
 {
 
 	maxHex::Workspace TestWorkspace;
+	maxHex::UserInteractionState TestUserInteractionState;
 
 	LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam, LPARAM lParam)
 	{
@@ -22,8 +24,6 @@ namespace
 		static int CharHeight;
 		static int ClientHeight;
 		static int ClientWidth;
-		static int VerticalScrollPosition = 0;
-		static int HorizontalScrollPosition = 0;
 		static int MaxWidth;
 		SCROLLINFO ScrollInfo;
 		static ULONG LinesToScrollPerThreshold = 0;
@@ -96,7 +96,7 @@ namespace
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_ALL;
 			GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
-			VerticalScrollPosition = ScrollInfo.nPos;
+			TestUserInteractionState.VerticalScrollOffset = ScrollInfo.nPos;
 
 			switch (LOWORD(wParam))
 			{
@@ -141,13 +141,13 @@ namespace
 			if (TotalSize != 0) {
 				LineCount = TotalSize / 16;
 			}
-			if (VerticalScrollPosition != ScrollInfo.nPos)
+			if (TestUserInteractionState.VerticalScrollOffset != ScrollInfo.nPos)
 			{
 				RECT ScrollArea;
 				GetClientRect(WindowHandle, &ScrollArea);
 				// Leave the header
 				ScrollArea.top += CharHeight;
-				ScrollWindowEx(WindowHandle, 0, CharHeight * (VerticalScrollPosition - ScrollInfo.nPos), &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				ScrollWindowEx(WindowHandle, 0, CharHeight * (TestUserInteractionState.VerticalScrollOffset - ScrollInfo.nPos), &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
 				UpdateWindow(WindowHandle);
 			}
 			return 0;
@@ -156,7 +156,7 @@ namespace
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_ALL;
 			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
-			HorizontalScrollPosition = ScrollInfo.nPos;
+			TestUserInteractionState.HorizontalScrollOffset = ScrollInfo.nPos;
 
 			switch (LOWORD(wParam))
 			{
@@ -182,11 +182,11 @@ namespace
 			SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
 			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
 
-			if (HorizontalScrollPosition != ScrollInfo.nPos)
+			if (TestUserInteractionState.HorizontalScrollOffset != ScrollInfo.nPos)
 			{
 				RECT ScrollArea;
 				GetClientRect(WindowHandle, &ScrollArea);
-				ScrollWindowEx(WindowHandle, CharWidth * (HorizontalScrollPosition - ScrollInfo.nPos), 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				ScrollWindowEx(WindowHandle, CharWidth * (TestUserInteractionState.HorizontalScrollOffset - ScrollInfo.nPos), 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
 				UpdateWindow(WindowHandle);
 			}
 			return 0;
@@ -241,7 +241,7 @@ namespace
 				LinesToScroll = AccumulatedDelta / WHEEL_DELTA * LinesToScrollPerThreshold;
 			}
 
-			VerticalScrollPosition = ScrollInfo.nPos;
+			TestUserInteractionState.VerticalScrollOffset = ScrollInfo.nPos;
 
 
 			ScrollInfo.nPos -= LinesToScroll;
@@ -258,13 +258,13 @@ namespace
 			if (TotalSize != 0) {
 				LineCount = TotalSize / 16;
 			}
-			if (VerticalScrollPosition != ScrollInfo.nPos)
+			if (TestUserInteractionState.VerticalScrollOffset != ScrollInfo.nPos)
 			{
 				RECT ScrollArea;
 				GetClientRect(WindowHandle, &ScrollArea);
 				// Leave the header
 				ScrollArea.top += CharHeight;
-				ScrollWindowEx(WindowHandle, 0, CharHeight * (VerticalScrollPosition - ScrollInfo.nPos), &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				ScrollWindowEx(WindowHandle, 0, CharHeight * (TestUserInteractionState.VerticalScrollOffset - ScrollInfo.nPos), &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
 				UpdateWindow(WindowHandle);
 			}
 			return 0;
@@ -274,7 +274,7 @@ namespace
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_ALL;
 			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
-			HorizontalScrollPosition = ScrollInfo.nPos;
+			TestUserInteractionState.HorizontalScrollOffset = ScrollInfo.nPos;
 
 			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
 			int CharactersToScroll = AccumulatedDelta / WHEEL_DELTA * CharsToScrollPerThreahold;
@@ -284,12 +284,12 @@ namespace
 			SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
 			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
 
-			if (HorizontalScrollPosition != ScrollInfo.nPos)
+			if (TestUserInteractionState.HorizontalScrollOffset != ScrollInfo.nPos)
 			{
 				RECT ScrollArea;
 				GetClientRect(WindowHandle, &ScrollArea);
-				ScrollWindowEx(WindowHandle, CharWidth * (HorizontalScrollPosition - ScrollInfo.nPos), 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
-				HorizontalScrollPosition = ScrollInfo.nPos;
+				ScrollWindowEx(WindowHandle, CharWidth * (TestUserInteractionState.HorizontalScrollOffset - ScrollInfo.nPos), 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				TestUserInteractionState.HorizontalScrollOffset = ScrollInfo.nPos;
 				UpdateWindow(WindowHandle);
 			}
 
@@ -330,49 +330,49 @@ namespace
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_POS;
 			GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
-			VerticalScrollPosition = ScrollInfo.nPos;
+			TestUserInteractionState.VerticalScrollOffset = ScrollInfo.nPos;
 			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
-			HorizontalScrollPosition = ScrollInfo.nPos;
+			TestUserInteractionState.HorizontalScrollOffset = ScrollInfo.nPos;
 
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 0)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x0"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 1)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x1"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 2)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x2"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 3)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x3"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 4)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x4"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 5)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x5"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 6)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x6"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 7)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x7"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 8)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x8"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 9)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("x9"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 10)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("xA"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 11)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("xB"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 12)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("xC"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 13)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("xD"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 14)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("xE"), 2);
-			TextOut(DeviceContext, CharWidth * (12 + (3 * 15)) - (HorizontalScrollPosition * CharWidth), 0, TEXT("xF"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 0)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x0"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 1)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x1"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 2)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x2"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 3)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x3"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 4)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x4"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 5)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x5"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 6)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x6"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 7)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x7"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 8)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x8"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 9)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("x9"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 10)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("xA"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 11)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("xB"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 12)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("xC"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 13)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("xD"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 14)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("xE"), 2);
+			TextOut(DeviceContext, CharWidth * (12 + (3 * 15)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("xF"), 2);
 
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 0) - (HorizontalScrollPosition * CharWidth), 0, TEXT("0"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 1) - (HorizontalScrollPosition * CharWidth), 0, TEXT("1"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 2) - (HorizontalScrollPosition * CharWidth), 0, TEXT("2"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 3) - (HorizontalScrollPosition * CharWidth), 0, TEXT("3"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 4) - (HorizontalScrollPosition * CharWidth), 0, TEXT("4"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 5) - (HorizontalScrollPosition * CharWidth), 0, TEXT("5"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 6) - (HorizontalScrollPosition * CharWidth), 0, TEXT("6"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 7) - (HorizontalScrollPosition * CharWidth), 0, TEXT("7"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 8) - (HorizontalScrollPosition * CharWidth), 0, TEXT("8"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 9) - (HorizontalScrollPosition * CharWidth), 0, TEXT("9"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 10) - (HorizontalScrollPosition * CharWidth), 0, TEXT("A"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 11) - (HorizontalScrollPosition * CharWidth), 0, TEXT("B"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 12) - (HorizontalScrollPosition * CharWidth), 0, TEXT("C"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 13) - (HorizontalScrollPosition * CharWidth), 0, TEXT("D"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 14) - (HorizontalScrollPosition * CharWidth), 0, TEXT("E"), 1);
-			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 15) - (HorizontalScrollPosition * CharWidth), 0, TEXT("F"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 0) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("0"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 1) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("1"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 2) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("2"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 3) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("3"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 4) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("4"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 5) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("5"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 6) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("6"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 7) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("7"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 8) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("8"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 9) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("9"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 10) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("A"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 11) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("B"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 12) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("C"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 13) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("D"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 14) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("E"), 1);
+			TextOut(DeviceContext, CharWidth * (47 + 12 + 3 + 15) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), 0, TEXT("F"), 1);
 
 			size_t AccumulatedBufferSize = 0;
 			size_t CurrentBuffer = 0;
-			for (int i = VerticalScrollPosition; i < LineCount; i++)
+			for (int i = TestUserInteractionState.VerticalScrollOffset; i < LineCount; i++)
 			{
-				int Height = CharHeight * (i - VerticalScrollPosition + 1);
+				int Height = CharHeight * (i - TestUserInteractionState.VerticalScrollOffset + 1);
 				SetTextAlign(DeviceContext, TA_LEFT | TA_TOP);
 
 				// Display the address
@@ -380,7 +380,7 @@ namespace
 				const size_t BufferSizeInBytes = BufferSizeInCharacters * sizeof(TCHAR);
 				TCHAR Buffer[BufferSizeInCharacters];
 				StringCbPrintf(Buffer, BufferSizeInBytes, TEXT("%08dx"), i);
-				TextOut(DeviceContext, -(HorizontalScrollPosition * CharWidth), Height, Buffer, BufferSizeInCharacters - 1);
+				TextOut(DeviceContext, -(TestUserInteractionState.HorizontalScrollOffset * CharWidth), Height, Buffer, BufferSizeInCharacters - 1);
 
 				int BytesOnThisLine = 16;
 				if (i == LineCount - 1)
@@ -403,9 +403,9 @@ namespace
 					const unsigned char CurrentChar = TestWorkspace.Buffers.BufferList[CurrentBuffer]->Storage[BufferIndex];
 					size_t HighNibble = CurrentChar >> 4;
 					size_t  LowNibble = CurrentChar & 0x0f;
-					TextOutA(DeviceContext, (CharWidth * (12 + (3 * j) + 0)) - (HorizontalScrollPosition * CharWidth), Height, &HexString[HighNibble], 1);
-					TextOutA(DeviceContext, (CharWidth * (12 + (3 * j) + 1)) - (HorizontalScrollPosition * CharWidth), Height, &HexString[LowNibble], 1);
-					TextOutA(DeviceContext, (CharWidth * (47 + 12 + 3 + j)) - (HorizontalScrollPosition * CharWidth), Height, reinterpret_cast<const char*>(&CurrentChar), 1);
+					TextOutA(DeviceContext, (CharWidth * (12 + (3 * j) + 0)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), Height, &HexString[HighNibble], 1);
+					TextOutA(DeviceContext, (CharWidth * (12 + (3 * j) + 1)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), Height, &HexString[LowNibble], 1);
+					TextOutA(DeviceContext, (CharWidth * (47 + 12 + 3 + j)) - (TestUserInteractionState.HorizontalScrollOffset * CharWidth), Height, reinterpret_cast<const char*>(&CurrentChar), 1);
 				}
 			}
 
