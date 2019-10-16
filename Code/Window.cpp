@@ -369,16 +369,29 @@ namespace
 
 
 		HDC DeviceContext = CreateCompatibleDC(NULL);
-		HFONT NewFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
+
+		// Windows Vista+ comes with Consolas
+		LOGFONT lf = { 0 };
+		for (size_t i = 0; i < 9; i++) {
+			lf.lfFaceName[i] = "Consolas"[i];
+		}
+		lf.lfHeight = 14;
+		HFONT NewFont = CreateFontIndirect(&lf);
+		if (NewFont == NULL)
+		{
+			NewFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
+		}
 		HFONT OldFont = (HFONT)SelectObject(DeviceContext, NewFont);
 
 		TEXTMETRIC TextMetrics;
 		GetTextMetrics(DeviceContext, &TextMetrics);
 		int CharWidth = TextMetrics.tmAveCharWidth;
-		CharWidth++; // Ave seems not great
 		int CharHeight = TextMetrics.tmHeight + TextMetrics.tmExternalLeading;
 
-		int ClientWidth = CharWidth * 72;
+		int VerticalScrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
+		//int HorizontalScrollBarHeight = GetSystemMetrics(SM_CXVSCROLL);
+
+		int ClientWidth = CharWidth * 78 + VerticalScrollBarWidth;
 		int ClientHeight = CharHeight * 40;
 		SelectObject(DeviceContext, OldFont);
 		DeleteObject(DeviceContext);
