@@ -30,6 +30,8 @@ namespace
 		SCROLLINFO ScrollInfo;
 		static ULONG LinesToScrollPerThreshold = 0;
 		static ULONG CharsToScrollPerThreahold = 0;
+		static int VerticalScrollAccumulation = 0;
+		static int HorizontalScrollAccumulation = 0;
 
 		switch (Message)
 		{
@@ -231,19 +233,22 @@ namespace
 			GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
 
 			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
+			VerticalScrollAccumulation += AccumulatedDelta;
+			int DeltasCompleted = VerticalScrollAccumulation / WHEEL_DELTA;
+			VerticalScrollAccumulation -= DeltasCompleted * WHEEL_DELTA;
 			int LinesToScroll = 0;
 			if (LinesToScrollPerThreshold == WHEEL_PAGESCROLL)
 			{
 				if (AccumulatedDelta < 0)
 				{
-					LinesToScroll = -static_cast<int>(ScrollInfo.nPage);
+					LinesToScroll = -static_cast<int>(ScrollInfo.nPage) * DeltasCompleted;
 				}
 				else {
-					LinesToScroll = ScrollInfo.nPage;
+					LinesToScroll = ScrollInfo.nPage * DeltasCompleted;
 				}
 			}
 			else {
-				LinesToScroll = AccumulatedDelta / WHEEL_DELTA * LinesToScrollPerThreshold;
+				LinesToScroll = DeltasCompleted * LinesToScrollPerThreshold;
 			}
 
 			ScrollInfo.nPos -= LinesToScroll;
@@ -282,9 +287,12 @@ namespace
 			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
 
 			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
-			int CharactersToScroll = AccumulatedDelta / WHEEL_DELTA * CharsToScrollPerThreahold;
-			ScrollInfo.nPos += CharactersToScroll;
+			HorizontalScrollAccumulation += AccumulatedDelta;
+			int DeltasCompleted = HorizontalScrollAccumulation / WHEEL_DELTA;
+			HorizontalScrollAccumulation -= DeltasCompleted * WHEEL_DELTA;
+			int CharactersToScroll = DeltasCompleted * CharsToScrollPerThreahold;
 
+			ScrollInfo.nPos += CharactersToScroll;
 			ScrollInfo.fMask = SIF_POS;
 			SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
 			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
