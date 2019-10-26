@@ -29,7 +29,7 @@ namespace
 		static int MaxWidth;
 		SCROLLINFO ScrollInfo;
 		static ULONG LinesToScrollPerThreshold = 0;
-		static ULONG CharsToScrollPerThreahold = 0;
+		static ULONG CharsToScrollPerThreshold = 0;
 		static int VerticalScrollAccumulation = 0;
 		static int HorizontalScrollAccumulation = 0;
 
@@ -61,7 +61,7 @@ namespace
 		}
 		case WM_SETTINGCHANGE:
 			SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &LinesToScrollPerThreshold, 0);
-			SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &CharsToScrollPerThreahold, 0);
+			SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &CharsToScrollPerThreshold, 0);
 			return 0;
 		case WM_SIZE:
 		{
@@ -234,8 +234,11 @@ namespace
 
 			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
 			VerticalScrollAccumulation += AccumulatedDelta;
-			int DeltasCompleted = VerticalScrollAccumulation / WHEEL_DELTA;
-			VerticalScrollAccumulation -= DeltasCompleted * WHEEL_DELTA;
+			int DeltaPerLine = WHEEL_DELTA;
+			if (LinesToScrollPerThreshold != WHEEL_PAGESCROLL)
+				DeltaPerLine = WHEEL_DELTA / LinesToScrollPerThreshold;
+			int DeltasCompleted = VerticalScrollAccumulation / DeltaPerLine;
+			VerticalScrollAccumulation -= DeltasCompleted * DeltaPerLine;
 			int LinesToScroll = 0;
 			if (LinesToScrollPerThreshold == WHEEL_PAGESCROLL)
 			{
@@ -248,7 +251,7 @@ namespace
 				}
 			}
 			else {
-				LinesToScroll = DeltasCompleted * LinesToScrollPerThreshold;
+				LinesToScroll = DeltasCompleted;
 			}
 
 			ScrollInfo.nPos -= LinesToScroll;
@@ -288,9 +291,10 @@ namespace
 
 			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
 			HorizontalScrollAccumulation += AccumulatedDelta;
-			int DeltasCompleted = HorizontalScrollAccumulation / WHEEL_DELTA;
-			HorizontalScrollAccumulation -= DeltasCompleted * WHEEL_DELTA;
-			int CharactersToScroll = DeltasCompleted * CharsToScrollPerThreahold;
+			int DeltaPerChar = WHEEL_DELTA / CharsToScrollPerThreshold;
+			int DeltasCompleted = HorizontalScrollAccumulation / DeltaPerChar;
+			HorizontalScrollAccumulation -= DeltasCompleted * DeltaPerChar;
+			int CharactersToScroll = DeltasCompleted;
 
 			ScrollInfo.nPos += CharactersToScroll;
 			ScrollInfo.fMask = SIF_POS;
