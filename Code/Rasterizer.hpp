@@ -4,6 +4,7 @@
 #include <max/Compiling/Configuration.hpp>
 
 #if defined(MAX_PLATFORM_WINDOWS)
+#define NOMINMAX
 #include <Windows.h>
 #endif
 #include "BufferChain.hpp"

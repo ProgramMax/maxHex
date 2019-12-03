@@ -345,6 +345,7 @@ namespace
 					TotalSize += CurrentBuffer->Length;
 				}
 				size_t LineCount = (TotalSize / 16) + 1;
+				InvalidateRect(WindowHandle, NULL, FALSE);
 				SetScrollRange(WindowHandle, SB_VERT, 0, static_cast<int>(LineCount) - 1, FALSE);
 				SetScrollPos(WindowHandle, SB_VERT, 0, TRUE);
 				UpdateWindow(WindowHandle);
