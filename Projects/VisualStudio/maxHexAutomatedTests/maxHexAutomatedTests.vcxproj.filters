@@ -12,5 +12,19 @@
     <ClCompile Include="..\..\..\Code\BufferChainTests.cpp" />
     <ClCompile Include="..\..\..\Code\FileTests.cpp" />
     <ClCompile Include="..\..\..\Code\FileBackedBufferTests.cpp" />
+    <ClCompile Include="..\..\..\Dependencies\max\Code\max\Testing\CoutResultPolicy.cpp">
+      <Filter>Dependencies\max\Testing</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{92fa6455-bc49-49c7-abc2-47c15c7072ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\max">
+      <UniqueIdentifier>{7f3e132e-46b0-46fa-83e8-edd31513e2a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\max\Testing">
+      <UniqueIdentifier>{72b09ce4-fa2f-4c5c-be96-fbfc277e0ec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
