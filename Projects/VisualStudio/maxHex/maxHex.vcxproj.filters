@@ -76,6 +76,9 @@
     <ClCompile Include="..\..\..\Code\Font.cpp">
       <Filter>Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Code\EntryPoint.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp">
