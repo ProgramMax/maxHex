@@ -2,8 +2,7 @@
 
 maxHex is a hex editor.
 
-<!-- [![Travis CI status][travis-shield]][travis-link] -->
-[![AppVeyor CI status][appveyor-shield]][appveyor-link]
+[![Build and test](https://github.com/ProgramMax/maxHex/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/ProgramMax/maxHex/actions/workflows/build-and-test.yaml)
 
 ## Features
 
