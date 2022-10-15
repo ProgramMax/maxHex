@@ -9,6 +9,15 @@
     <ClInclude Include="..\..\..\Code\Buffer.hpp" />
     <ClInclude Include="..\..\..\Code\FileBackedBuffer.hpp" />
     <ClInclude Include="..\..\..\Code\File.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Testing\CoutResultPolicy.hpp">
+      <Filter>Dependencies\max\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Testing\Test.hpp">
+      <Filter>Dependencies\max\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Testing\TestSuite.hpp">
+      <Filter>Dependencies\max\Testing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Code\BufferTests.cpp" />
@@ -16,13 +25,13 @@
     <ClCompile Include="..\..\..\Code\BufferChainTests.cpp" />
     <ClCompile Include="..\..\..\Code\FileTests.cpp" />
     <ClCompile Include="..\..\..\Code\FileBackedBufferTests.cpp" />
-    <ClCompile Include="..\..\..\Dependencies\max\Code\max\Testing\CoutResultPolicy.cpp">
-      <Filter>Dependencies\max\Testing</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Code\BufferChain.cpp" />
     <ClCompile Include="..\..\..\Code\Buffer.cpp" />
     <ClCompile Include="..\..\..\Code\FileBackedBuffer.cpp" />
     <ClCompile Include="..\..\..\Code\File.cpp" />
+    <ClCompile Include="..\..\..\Dependencies\max\Code\max\Testing\CoutResultPolicy.cpp">
+      <Filter>Dependencies\max\Testing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Dependencies">
@@ -34,5 +43,13 @@
     <Filter Include="Dependencies\max\Testing">
       <UniqueIdentifier>{72b09ce4-fa2f-4c5c-be96-fbfc277e0ec0}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Dependencies\max\Code\max\Testing\Test.inl">
+      <Filter>Dependencies\max\Testing</Filter>
+    </None>
+    <None Include="..\..\..\Dependencies\max\Code\max\Testing\TestSuite.inl">
+      <Filter>Dependencies\max\Testing</Filter>
+    </None>
   </ItemGroup>
 </Project>
