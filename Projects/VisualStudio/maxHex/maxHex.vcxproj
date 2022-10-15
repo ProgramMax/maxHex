@@ -40,8 +40,10 @@
     <ClCompile Include="..\..\..\Code\UserInteractionState.cpp" />
     <ClCompile Include="..\..\..\Code\Window.cpp" />
     <ClCompile Include="..\..\..\Code\Workspace.cpp" />
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Control.cpp" />
     <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\EntryPoint.cpp" />
     <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Form.cpp" />
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Rectangle.cpp" />
     <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Win32String.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -55,8 +57,10 @@
     <ClInclude Include="..\..\..\Code\UserInteractionState.hpp" />
     <ClInclude Include="..\..\..\Code\Window.hpp" />
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Control.hpp" />
     <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\EntryPoint.hpp" />
     <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Form.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Rectangle.hpp" />
     <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Win32String.hpp" />
     <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration.hpp" />
     <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler.hpp" />
