@@ -2,103 +2,115 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "Buffer.hpp"
-#include "Font.hpp"
-#include "Rasterizer.hpp"
-#include "UserInteractionState.hpp"
 #include "Window.hpp"
+
+#include <maxGUI/Form.hpp>
+
+#include "Buffer.hpp"
+#include "UserInteractionState.hpp"
 #include "Workspace.hpp"
 
 #include <strsafe.h>
 #include <algorithm>
 
+#include <shellapi.h>
+
 namespace maxHex
 {
+
+	std::unique_ptr<maxHex::Font> TestFont = nullptr;
+	std::unique_ptr<maxHex::Rasterizer> TestRasterizer = nullptr;
+
 namespace
 {
 
 	maxHex::Workspace TestWorkspace;
 	maxHex::UserInteractionState TestUserInteractionState;
-	std::unique_ptr<maxHex::Rasterizer> TestRasterizer; // TODO: The Form should own this as a non-unique_ptr
-	std::unique_ptr<maxHex::Font> TestFont; // TODO: The Form should own this as a non-unique_ptr
 
-	LRESULT CALLBACK WindowProcedure(HWND WindowHandle, UINT Message, WPARAM wParam, LPARAM lParam)
-	{
-		static int ClientHeight;
-		static int ClientWidth;
-		static int MaxWidth;
-		SCROLLINFO ScrollInfo;
-		static ULONG LinesToScrollPerThreshold = 0;
-		static ULONG CharsToScrollPerThreshold = 0;
+	int MaxWidth;
+	ULONG LinesToScrollPerThreshold = 0;
+	ULONG CharsToScrollPerThreshold = 0;
+	int ClientHeight;
+	int ClientWidth;
+	SCROLLINFO ScrollInfo;
+
+
+} // anonymous namespace
+
+	void MainForm::OnCreated(maxGUI::FormConcept* form) noexcept {
+		HDC DeviceContext = GetDC(form->window_handle_);
+
+		TestRasterizer = std::make_unique<maxHex::Rasterizer>(maxHex::Rasterizer::Create(DeviceContext, *TestFont));
+		ReleaseDC(form->window_handle_, DeviceContext);
+
+		MaxWidth = 72 * TestRasterizer->CharacterWidth; // TODO: Find real value
+
+		size_t TotalSize = 0;
+		for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+		{
+			TotalSize += CurrentBuffer->Length;
+		}
+		size_t LineCount = 0;
+		if (TotalSize != 0) {
+			LineCount = (TotalSize / 16) + 1;
+		}
+		// TODO: Figure out how to store larger numbers in the scroll range
+		SetScrollRange(form->window_handle_, SB_VERT, 0, static_cast<int>(LineCount) - 1, FALSE);
+		SetScrollPos(form->window_handle_, SB_VERT, 0, TRUE);
+
+		SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &LinesToScrollPerThreshold, 0);
+		SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &CharsToScrollPerThreshold, 0);
+	}
+
+	void MainForm::OnClosed(maxGUI::FormConcept* /*form*/) noexcept {
+		maxGUI::PostExitMessage(0);
+	}
+
+	void MainForm::OnResized(maxGUI::FormConcept* form, int new_height, int new_width) noexcept {
+		size_t TotalSize = 0;
+		for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
+		{
+			TotalSize += CurrentBuffer->Length;
+		}
+		size_t LineCount = 0;
+		if (TotalSize != 0) {
+			LineCount = (TotalSize / 16) + 1;
+		}
+		ClientHeight = new_height;
+		ClientWidth = new_width;
+
+		ScrollInfo.cbSize = sizeof(ScrollInfo);
+		ScrollInfo.fMask = SIF_RANGE | SIF_PAGE;
+		ScrollInfo.nMin = 0;
+		ScrollInfo.nMax = static_cast<int>(LineCount);
+		ScrollInfo.nPage = ClientHeight / TestRasterizer->CharacterHeight;
+		SetScrollInfo(form->window_handle_, SB_VERT, &ScrollInfo, TRUE);
+
+		ScrollInfo.cbSize = sizeof(ScrollInfo);
+		ScrollInfo.fMask = SIF_RANGE | SIF_PAGE;
+		ScrollInfo.nMin = 0;
+		ScrollInfo.nMax = 78;
+		ScrollInfo.nPage = ClientWidth / TestRasterizer->CharacterWidth;
+		SetScrollInfo(form->window_handle_, SB_HORZ, &ScrollInfo, TRUE);
+	}
+
+	LRESULT MainForm::OnWindowMessage(maxGUI::FormConcept* form, UINT message, WPARAM wparam, LPARAM lparam) noexcept {
 		static int VerticalScrollAccumulation = 0;
 		static int HorizontalScrollAccumulation = 0;
 
-		switch (Message)
+		switch (message)
 		{
-		case WM_CREATE:
-		{
-			HDC DeviceContext = GetDC(WindowHandle);
-
-			TestRasterizer = std::make_unique<maxHex::Rasterizer>(maxHex::Rasterizer::Create(DeviceContext, *TestFont));
-			ReleaseDC(WindowHandle, DeviceContext);
-
-			MaxWidth = 72 * TestRasterizer->CharacterWidth; // TODO: Find real value
-
-			size_t TotalSize = 0;
-			for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
-			{
-				TotalSize += CurrentBuffer->Length;
-			}
-			size_t LineCount = 0;
-			if (TotalSize != 0) {
-				LineCount = (TotalSize / 16) + 1;
-			}
-			// TODO: Figure out how to store larger numbers in the scroll range
-			SetScrollRange(WindowHandle, SB_VERT, 0, static_cast<int>(LineCount) - 1, FALSE);
-			SetScrollPos(WindowHandle, SB_VERT, 0, TRUE);
-			//return 0;
-			// fall through
-		}
 		case WM_SETTINGCHANGE:
 			SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &LinesToScrollPerThreshold, 0);
 			SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &CharsToScrollPerThreshold, 0);
 			return 0;
-		case WM_SIZE:
-		{
-			size_t TotalSize = 0;
-			for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
-			{
-				TotalSize += CurrentBuffer->Length;
-			}
-			size_t LineCount = 0;
-			if (TotalSize != 0) {
-				LineCount = (TotalSize / 16) + 1;
-			}
-			ClientHeight = HIWORD(lParam);
-			ClientWidth = LOWORD(lParam);
-
-			ScrollInfo.cbSize = sizeof(ScrollInfo);
-			ScrollInfo.fMask = SIF_RANGE | SIF_PAGE;
-			ScrollInfo.nMin = 0;
-			ScrollInfo.nMax = static_cast<int>(LineCount);
-			ScrollInfo.nPage = ClientHeight / TestRasterizer->CharacterHeight;
-			SetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo, TRUE);
-
-			ScrollInfo.cbSize = sizeof(ScrollInfo);
-			ScrollInfo.fMask = SIF_RANGE | SIF_PAGE;
-			ScrollInfo.nMin = 0;
-			ScrollInfo.nMax = 78;
-			ScrollInfo.nPage = ClientWidth / TestRasterizer->CharacterWidth;
-			SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
-			return 0;
-		}
 		case WM_VSCROLL:
 		{
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_ALL;
-			GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
+			GetScrollInfo(form->window_handle_, SB_VERT, &ScrollInfo);
 
-			switch (LOWORD(wParam))
+			switch (LOWORD(wparam))
 			{
 			case SB_TOP:
 				ScrollInfo.nPos = ScrollInfo.nMin;
@@ -129,8 +141,8 @@ namespace
 				break;
 			}
 			ScrollInfo.fMask = SIF_POS;
-			SetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo, TRUE);
-			GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
+			SetScrollInfo(form->window_handle_, SB_VERT, &ScrollInfo, TRUE);
+			GetScrollInfo(form->window_handle_, SB_VERT, &ScrollInfo);
 
 			size_t TotalSize = 0;
 			for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
@@ -149,20 +161,20 @@ namespace
 				TestUserInteractionState.VerticalScrollOffset = ScrollInfo.nPos;
 
 				RECT ScrollArea;
-				GetClientRect(WindowHandle, &ScrollArea);
+				GetClientRect(form->window_handle_, &ScrollArea);
 				// Leave the header
 				ScrollArea.top += TestRasterizer->CharacterHeight;
-				ScrollWindowEx(WindowHandle, 0, TestRasterizer->CharacterHeight * ScrollDifference, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
-				UpdateWindow(WindowHandle);
+				ScrollWindowEx(form->window_handle_, 0, TestRasterizer->CharacterHeight * ScrollDifference, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				UpdateWindow(form->window_handle_);
 			}
 			return 0;
 		}
 		case WM_HSCROLL:
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_ALL;
-			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
+			GetScrollInfo(form->window_handle_, SB_HORZ, &ScrollInfo);
 
-			switch (LOWORD(wParam))
+			switch (LOWORD(wparam))
 			{
 			case SB_LINELEFT:
 				ScrollInfo.nPos -= 1;
@@ -183,8 +195,8 @@ namespace
 				break;
 			}
 			ScrollInfo.fMask = SIF_POS;
-			SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
-			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
+			SetScrollInfo(form->window_handle_, SB_HORZ, &ScrollInfo, TRUE);
+			GetScrollInfo(form->window_handle_, SB_HORZ, &ScrollInfo);
 
 			if (TestUserInteractionState.HorizontalScrollOffset != ScrollInfo.nPos)
 			{
@@ -192,34 +204,34 @@ namespace
 				TestUserInteractionState.HorizontalScrollOffset = ScrollInfo.nPos;
 
 				RECT ScrollArea;
-				GetClientRect(WindowHandle, &ScrollArea);
-				ScrollWindowEx(WindowHandle, TestRasterizer->CharacterWidth * ScrollDifference, 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
-				UpdateWindow(WindowHandle);
+				GetClientRect(form->window_handle_, &ScrollArea);
+				ScrollWindowEx(form->window_handle_, TestRasterizer->CharacterWidth * ScrollDifference, 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				UpdateWindow(form->window_handle_);
 			}
 			return 0;
 		case WM_KEYDOWN:
-			switch (wParam)
+			switch (wparam)
 			{
 			case VK_HOME:
 			case VK_END:
 				break;
 			case VK_PRIOR:
-				SendMessage(WindowHandle, WM_VSCROLL, SB_PAGEUP, 0);
+				SendMessage(form->window_handle_, WM_VSCROLL, SB_PAGEUP, 0);
 				break;
 			case VK_NEXT:
-				SendMessage(WindowHandle, WM_VSCROLL, SB_PAGEDOWN, 0);
+				SendMessage(form->window_handle_, WM_VSCROLL, SB_PAGEDOWN, 0);
 				break;
 			case VK_UP:
-				SendMessage(WindowHandle, WM_VSCROLL, SB_LINEUP, 0);
+				SendMessage(form->window_handle_, WM_VSCROLL, SB_LINEUP, 0);
 				break;
 			case VK_DOWN:
-				SendMessage(WindowHandle, WM_VSCROLL, SB_LINEDOWN, 0);
+				SendMessage(form->window_handle_, WM_VSCROLL, SB_LINEDOWN, 0);
 				break;
 			case VK_LEFT:
-				SendMessage(WindowHandle, WM_HSCROLL, SB_LINELEFT, 0);
+				SendMessage(form->window_handle_, WM_HSCROLL, SB_LINELEFT, 0);
 				break;
 			case VK_RIGHT:
-				SendMessage(WindowHandle, WM_HSCROLL, SB_LINERIGHT, 0);
+				SendMessage(form->window_handle_, WM_HSCROLL, SB_LINERIGHT, 0);
 				break;
 			}
 			return 0;
@@ -230,9 +242,9 @@ namespace
 
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_ALL;
-			GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
+			GetScrollInfo(form->window_handle_, SB_VERT, &ScrollInfo);
 
-			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
+			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wparam);
 			VerticalScrollAccumulation += AccumulatedDelta;
 			int DeltaPerLine = WHEEL_DELTA;
 			if (LinesToScrollPerThreshold != WHEEL_PAGESCROLL)
@@ -256,8 +268,8 @@ namespace
 
 			ScrollInfo.nPos -= LinesToScroll;
 			ScrollInfo.fMask = SIF_POS;
-			SetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo, TRUE);
-			GetScrollInfo(WindowHandle, SB_VERT, &ScrollInfo);
+			SetScrollInfo(form->window_handle_, SB_VERT, &ScrollInfo, TRUE);
+			GetScrollInfo(form->window_handle_, SB_VERT, &ScrollInfo);
 
 			size_t TotalSize = 0;
 			for (const std::unique_ptr<maxHex::Buffer>& CurrentBuffer : TestWorkspace.Buffers.BufferList)
@@ -275,11 +287,11 @@ namespace
 				TestUserInteractionState.VerticalScrollOffset = ScrollInfo.nPos;
 
 				RECT ScrollArea;
-				GetClientRect(WindowHandle, &ScrollArea);
+				GetClientRect(form->window_handle_, &ScrollArea);
 				// Leave the header
 				ScrollArea.top += TestRasterizer->CharacterHeight;
-				ScrollWindowEx(WindowHandle, 0, TestRasterizer->CharacterHeight * ScrollDifference, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
-				UpdateWindow(WindowHandle);
+				ScrollWindowEx(form->window_handle_, 0, TestRasterizer->CharacterHeight * ScrollDifference, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				UpdateWindow(form->window_handle_);
 			}
 			return 0;
 		}
@@ -287,9 +299,9 @@ namespace
 		{
 			ScrollInfo.cbSize = sizeof(ScrollInfo);
 			ScrollInfo.fMask = SIF_ALL;
-			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
+			GetScrollInfo(form->window_handle_, SB_HORZ, &ScrollInfo);
 
-			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wParam);
+			short AccumulatedDelta = (short)GET_WHEEL_DELTA_WPARAM(wparam);
 			HorizontalScrollAccumulation += AccumulatedDelta;
 			int DeltaPerChar = WHEEL_DELTA / CharsToScrollPerThreshold;
 			int DeltasCompleted = HorizontalScrollAccumulation / DeltaPerChar;
@@ -298,8 +310,8 @@ namespace
 
 			ScrollInfo.nPos += CharactersToScroll;
 			ScrollInfo.fMask = SIF_POS;
-			SetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo, TRUE);
-			GetScrollInfo(WindowHandle, SB_HORZ, &ScrollInfo);
+			SetScrollInfo(form->window_handle_, SB_HORZ, &ScrollInfo, TRUE);
+			GetScrollInfo(form->window_handle_, SB_HORZ, &ScrollInfo);
 
 			if (TestUserInteractionState.HorizontalScrollOffset != ScrollInfo.nPos)
 			{
@@ -308,9 +320,9 @@ namespace
 				TestUserInteractionState.HorizontalScrollOffset = ScrollInfo.nPos;
 
 				RECT ScrollArea;
-				GetClientRect(WindowHandle, &ScrollArea);
-				ScrollWindowEx(WindowHandle, TestRasterizer->CharacterWidth * ScrollDifference, 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
-				UpdateWindow(WindowHandle);
+				GetClientRect(form->window_handle_, &ScrollArea);
+				ScrollWindowEx(form->window_handle_, TestRasterizer->CharacterWidth * ScrollDifference, 0, &ScrollArea, &ScrollArea, NULL, NULL, SW_INVALIDATE);
+				UpdateWindow(form->window_handle_);
 			}
 
 			// Despite the docs saying you should return 0 if you handle the message, you actually need to return non-zero.
@@ -321,22 +333,22 @@ namespace
 		case WM_PAINT:
 		{
 			PAINTSTRUCT PaintStruct;
-			HDC DeviceContext = BeginPaint(WindowHandle, &PaintStruct);
+			HDC DeviceContext = BeginPaint(form->window_handle_, &PaintStruct);
 
-			TestRasterizer->Rasterize(WindowHandle, DeviceContext, PaintStruct.rcPaint.top, PaintStruct.rcPaint.left, PaintStruct.rcPaint.bottom - PaintStruct.rcPaint.top, PaintStruct.rcPaint.right - PaintStruct.rcPaint.left, TestWorkspace.Buffers, TestUserInteractionState);
+			TestRasterizer->Rasterize(form->window_handle_, DeviceContext, PaintStruct.rcPaint.top, PaintStruct.rcPaint.left, PaintStruct.rcPaint.bottom - PaintStruct.rcPaint.top, PaintStruct.rcPaint.right - PaintStruct.rcPaint.left, TestWorkspace.Buffers, TestUserInteractionState);
 
-			EndPaint(WindowHandle, &PaintStruct);
+			EndPaint(form->window_handle_, &PaintStruct);
 			return 0;
 		}
 		case WM_DROPFILES:
 		{
-			UINT FileCount = DragQueryFile((HDROP)wParam, 0xFFFFFFFF, NULL, 0);
+			UINT FileCount = DragQueryFile((HDROP)wparam, 0xFFFFFFFF, NULL, 0);
 
 			for (UINT i = 0; i < FileCount; i++)
 			{
-				UINT BufferCharacterCount = DragQueryFile((HDROP)wParam, i, NULL, 0) + 1;
+				UINT BufferCharacterCount = DragQueryFile((HDROP)wparam, i, NULL, 0) + 1;
 				TCHAR* Buffer = new TCHAR[BufferCharacterCount];
-				DragQueryFile((HDROP)wParam, i, Buffer, BufferCharacterCount);
+				DragQueryFile((HDROP)wparam, i, Buffer, BufferCharacterCount);
 
 				TestWorkspace = maxHex::CreateWorkspaceFromFile(maxHex::File(Buffer));
 				size_t TotalSize = 0;
@@ -345,98 +357,18 @@ namespace
 					TotalSize += CurrentBuffer->Length;
 				}
 				size_t LineCount = (TotalSize / 16) + 1;
-				InvalidateRect(WindowHandle, NULL, FALSE);
-				SetScrollRange(WindowHandle, SB_VERT, 0, static_cast<int>(LineCount) - 1, FALSE);
-				SetScrollPos(WindowHandle, SB_VERT, 0, TRUE);
-				UpdateWindow(WindowHandle);
+				InvalidateRect(form->window_handle_, NULL, FALSE);
+				SetScrollRange(form->window_handle_, SB_VERT, 0, static_cast<int>(LineCount) - 1, FALSE);
+				SetScrollPos(form->window_handle_, SB_VERT, 0, TRUE);
+				UpdateWindow(form->window_handle_);
 				delete[] Buffer;
 			}
-			DragFinish((HDROP)wParam);
+			DragFinish((HDROP)wparam);
 			return 0;
 		}
-		case WM_DESTROY:
-			PostQuitMessage(0);
-			return 0;
 		}
 
-		return DefWindowProc(WindowHandle, Message, wParam, lParam);
-	}
-
-} // anonymous namespace
-
-	int InitializeWindow(HINSTANCE Instance, int ShowCommand) noexcept
-	{
-		TCHAR AppName[] = TEXT("maxHex");
-
-		WNDCLASSEX WindowClass;
-		WindowClass.cbSize = sizeof(WindowClass);
-		WindowClass.style = CS_HREDRAW | CS_VREDRAW | CS_CLASSDC;
-		WindowClass.lpfnWndProc = WindowProcedure;
-		WindowClass.cbClsExtra = 0;
-		WindowClass.cbWndExtra = 0;
-		WindowClass.hInstance = Instance;
-		WindowClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-		WindowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-		WindowClass.hbrBackground = (HBRUSH)GetStockObject(COLOR_APPWORKSPACE);
-		WindowClass.lpszMenuName = NULL;
-		WindowClass.lpszClassName = AppName;
-		WindowClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-		if (!RegisterClassEx(&WindowClass))
-		{
-			return -1;
-		}
-
-
-		HDC DeviceContext = CreateCompatibleDC(NULL);
-
-		// Windows Vista+ comes with Consolas
-		TestFont = std::make_unique<maxHex::Font>(maxHex::Font::Create("Consolas", 14));
-		if (TestFont->font == NULL)
-		{
-			TestFont->font = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
-		}
-		SelectObject(DeviceContext, TestFont->font);
-
-		TEXTMETRIC TextMetrics;
-		GetTextMetrics(DeviceContext, &TextMetrics);
-		int CharWidth = TextMetrics.tmAveCharWidth;
-		int CharHeight = TextMetrics.tmHeight + TextMetrics.tmExternalLeading;
-
-		int VerticalScrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
-		//int HorizontalScrollBarHeight = GetSystemMetrics(SM_CXVSCROLL);
-
-		int ClientWidth = CharWidth * 78 + VerticalScrollBarWidth;
-		int ClientHeight = CharHeight * 40;
-		DeleteObject(DeviceContext);
-
-
-		RECT rcRect;
-		rcRect.top = 0;
-		rcRect.left = 0;
-		rcRect.right = ClientWidth;
-		rcRect.bottom = ClientHeight;
-
-		DWORD WindowStyle = WS_OVERLAPPEDWINDOW | WS_VSCROLL;
-		DWORD ExtraWindowStyle = WS_EX_ACCEPTFILES;
-
-		AdjustWindowRectEx(&rcRect, WindowStyle, FALSE, ExtraWindowStyle);
-		DWORD TotalHeight = 0;
-		DWORD TotalWidth = 0;
-
-		rcRect.bottom -= rcRect.top;
-		TotalHeight = rcRect.bottom - rcRect.top;
-
-		rcRect.right -= rcRect.left;
-		TotalWidth = rcRect.right - rcRect.left;
-
-
-
-
-		HWND WindowHandle = CreateWindowEx(ExtraWindowStyle, AppName, TEXT("maxHex"), WindowStyle, CW_USEDEFAULT, CW_USEDEFAULT, TotalWidth, TotalHeight, NULL, NULL, Instance, NULL);
-		ShowWindow(WindowHandle, ShowCommand);
-		UpdateWindow(WindowHandle);
-
-		return 0;
+		return DefWindowProc(form->window_handle_, message, wparam, lparam);
 	}
 
 } // namespace maxHex

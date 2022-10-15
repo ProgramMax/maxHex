@@ -40,6 +40,9 @@
     <ClCompile Include="..\..\..\Code\UserInteractionState.cpp" />
     <ClCompile Include="..\..\..\Code\Window.cpp" />
     <ClCompile Include="..\..\..\Code\Workspace.cpp" />
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\EntryPoint.cpp" />
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Form.cpp" />
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Win32String.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp" />
@@ -52,6 +55,20 @@
     <ClInclude Include="..\..\..\Code\UserInteractionState.hpp" />
     <ClInclude Include="..\..\..\Code\Window.hpp" />
     <ClInclude Include="..\..\..\Code\Workspace.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\EntryPoint.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Form.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Win32String.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler\Clang.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler\GCC.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler\VC.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\Android.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\Linux.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\MacOS.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\Win32.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\StandardLibrary.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\..\Tooling\AppVeyor\junit-results.xml" />
@@ -113,7 +130,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\maxGUI\Code</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -121,7 +138,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\maxGUI\Code</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,7 +146,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\maxGUI\Code</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,7 +154,7 @@
     <OutDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(IncludePath)</IncludePath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\max\Code;$(MSBuildProjectDirectory)\..\..\..\Dependencies\maxGUI\Code</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -151,6 +168,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -168,6 +186,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -187,6 +206,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -208,6 +228,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

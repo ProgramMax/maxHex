@@ -5,13 +5,32 @@
 #ifndef MAXHEX_WINDOW_HPP
 #define MAXHEX_WINDOW_HPP
 
-#define NOMINMAX
+#include <maxGUI/Form.hpp>
+
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIn32_LEAN_AND_MEAN
+#endif
 #include <Windows.h>
+
+#include "Font.hpp"
+#include "Rasterizer.hpp"
 
 namespace maxHex
 {
 
-	int InitializeWindow(HINSTANCE Instance, int ShowCommand) noexcept;
+	extern std::unique_ptr<maxHex::Font> TestFont; // TODO: Make this not a global
+	extern std::unique_ptr<maxHex::Rasterizer> TestRasterizer; // TODO: Make this not a global
+
+	class MainForm {
+	public:
+
+		void OnCreated(maxGUI::FormConcept* form) noexcept;
+		void OnClosed(maxGUI::FormConcept* form) noexcept;
+		void OnResized(maxGUI::FormConcept* form, int new_height, int new_width) noexcept;
+
+		LRESULT OnWindowMessage(maxGUI::FormConcept* form, UINT message, WPARAM wparam, LPARAM lparam) noexcept;
+
+	};
 
 } // namespace maxHex
 

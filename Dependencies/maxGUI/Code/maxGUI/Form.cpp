@@ -175,7 +175,8 @@ namespace maxGUI {
 	bool FormFactory::CreateForm(HINSTANCE instance_handle, int height, int width, std::string title, FormStyles styles) noexcept {
 		WNDCLASSEX wcx = {0};
 		wcx.cbSize = sizeof(wcx);
-		wcx.style = 0;
+		// TODO: I cheated and added styles here. Upstream a better solution to maxGUI.
+		wcx.style = CS_HREDRAW | CS_VREDRAW | CS_CLASSDC;
 		wcx.lpfnWndProc = BaseWindowProcedure;
 		wcx.cbClsExtra = 0;
 		wcx.cbWndExtra = 0;
@@ -202,16 +203,20 @@ namespace maxGUI {
 		area.bottom = height;
 		area.right = width;
 
+		// TODO: I cheated and added styles here. Upstream a better solution to maxGUI.
 		DWORD win32_styles = 0;
 		if ((styles & FormStyles::FixedSize) == FormStyles::FixedSize) {
 			win32_styles |= WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;// | WS_CLIPCHILDREN;
 		} else {
-			win32_styles |= WS_OVERLAPPEDWINDOW;
+			win32_styles |= WS_OVERLAPPEDWINDOW | WS_VSCROLL;
 		}
 		if ((styles & FormStyles::DialogBox) == FormStyles::DialogBox) {
 			win32_styles |= WS_DLGFRAME;
 		}
-		DWORD extra_style = WS_EX_CONTROLPARENT | WS_EX_CLIENTEDGE; //WS_EX_WINDOWEDGE;
+		DWORD extra_style = WS_EX_CONTROLPARENT | WS_EX_CLIENTEDGE | WS_EX_ACCEPTFILES; //WS_EX_WINDOWEDGE;
+
+		//win32_styles = WS_OVERLAPPEDWINDOW | WS_VSCROLL;
+		//extra_style = WS_EX_ACCEPTFILES;
 
 		AdjustWindowRectEx(&area, win32_styles, FALSE, extra_style);
 		LONG total_height = 0;

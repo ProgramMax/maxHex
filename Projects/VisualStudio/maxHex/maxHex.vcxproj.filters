@@ -22,6 +22,27 @@
     <Filter Include="Tooling\Cppcheck">
       <UniqueIdentifier>{134c376c-ce8b-4125-912a-315d3833341f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{7b2aec57-1a87-4667-bce3-4fdb78c9f8ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\max">
+      <UniqueIdentifier>{f758c334-a495-4ff8-8c19-11d937b52e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\maxGUI">
+      <UniqueIdentifier>{b5acfe07-0fc3-4d27-8859-3c954ba41f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\max\Compiling">
+      <UniqueIdentifier>{9ef8c7a8-a75b-4d7e-8c9b-7ae8484b06a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\max\Compiling\Configuration">
+      <UniqueIdentifier>{8a8828b2-4bbe-46a3-9b57-a1f17a6789d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\max\Compiling\Configuration\Compiler">
+      <UniqueIdentifier>{80b5effc-60ea-4bff-a0cc-c872bcdb070c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\max\Compiling\Configuration\Platform">
+      <UniqueIdentifier>{e13aa7f0-5bac-47c3-808d-e2010deb910d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\.github\ISSUE_TEMPLATE\bug_report.md">
@@ -79,6 +100,15 @@
     <ClCompile Include="..\..\..\Code\EntryPoint.cpp">
       <Filter>Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Form.cpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\EntryPoint.cpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Win32String.cpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp">
@@ -110,6 +140,48 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Code\Font.hpp">
       <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Form.hpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\EntryPoint.hpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Win32String.hpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\StandardLibrary.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler\Clang.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler\GCC.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Compiler\VC.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\Android.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\Linux.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\MacOS.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration\Platform\Win32.hpp">
+      <Filter>Dependencies\max\Compiling\Configuration\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration.hpp">
+      <Filter>Dependencies\max\Compiling</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
