@@ -39,6 +39,13 @@
     <ClInclude Include="..\..\..\Code\FileBackedBuffer.hpp" />
     <ClInclude Include="..\..\..\Code\FileBackedBufferTests.hpp" />
     <ClInclude Include="..\..\..\Code\FileTests.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Testing\CoutResultPolicy.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Testing\Test.hpp" />
+    <ClInclude Include="..\..\..\Dependencies\max\Code\max\Testing\TestSuite.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Dependencies\max\Code\max\Testing\Test.inl" />
+    <None Include="..\..\..\Dependencies\max\Code\max\Testing\TestSuite.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

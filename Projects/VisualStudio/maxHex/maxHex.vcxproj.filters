@@ -109,6 +109,12 @@
     <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Win32String.cpp">
       <Filter>Dependencies\maxGUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Control.cpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Rectangle.cpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Code\Buffer.hpp">
@@ -182,6 +188,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Dependencies\max\Code\max\Compiling\Configuration.hpp">
       <Filter>Dependencies\max\Compiling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Control.hpp">
+      <Filter>Dependencies\maxGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Dependencies\maxGUI\Code\maxGUI\Rectangle.hpp">
+      <Filter>Dependencies\maxGUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
